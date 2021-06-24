@@ -3,7 +3,7 @@
 #include <string>
 #include "stdint.h"
 #include <vector>
-#include "ModbusDataTypes.h"
+#include "../ModbusDataTypes.h"
 
 namespace mbDevice{
 
@@ -33,6 +33,7 @@ namespace mbDevice{
             bool write(modbus_t* mb, unsigned int);
             bool write(modbus_t* mb, float);
             bool write(modbus_t* mb, double);
+
         private:
             std::vector<uint16_t> data;
     };

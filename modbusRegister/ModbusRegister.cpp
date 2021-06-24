@@ -1,18 +1,17 @@
 #include "ModbusRegister.h"
-#include "Conversions.h"
+#include "../Conversions/Conversions.h"
 #include <cmath>
 
 namespace mbDevice{
 
-    ModbusRegister::ModbusRegister(int addr_, int nb_, float factor_, mbDataType type_, std::string unit_){
-        addr = addr_;
-        nb = nb_;
-        factor = factor_;
-        type = type_;
-        unit = unit_;
-        std::vector<uint16_t> data_(nb,0);
-        data = data_;
-    }
+    ModbusRegister::ModbusRegister(int addr_, int nb_, float factor_, mbDataType type_, std::string unit_):
+        addr(addr_),
+        nb(nb_),
+        factor(factor_),
+        type(type_),
+        unit(unit_),
+        data(std::vector<uint16_t>(nb,0))
+    { return; }
 
     ModbusRegister::ModbusRegister(){}
 

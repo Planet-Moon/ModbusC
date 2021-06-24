@@ -1,5 +1,5 @@
 #pragma once
-#include "ModbusDevice.h"
+#include "../ModbusDevice/ModbusDevice.h"
 
 namespace SMA{
     class SMADevice: public mbDevice::ModbusDevice{

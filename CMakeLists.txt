@@ -6,34 +6,34 @@ project(main)
 
 add_library(
     hello
-    hello.h
-    hello.cpp
+    hello/hello.h
+    hello/hello.cpp
 )
 
 add_library(
     ModbusConversions
-    Conversions.h
-    Conversions.cpp
+    Conversions/Conversions.h
+    Conversions/Conversions.cpp
 )
 
 add_library(
     ModbusDevice
     ModbusDataTypes.h
-    ModbusDevice.h
-    ModbusDevice.cpp
+    ModbusDevice/ModbusDevice.h
+    ModbusDevice/ModbusDevice.cpp
 )
 
 add_library(
     ModbusRegister
     ModbusDataTypes.h
-    ModbusRegister.h
-    ModbusRegister.cpp
+    ModbusRegister/ModbusRegister.h
+    ModbusRegister/ModbusRegister.cpp
 )
 
 add_library(
     SMADevice
-    SMADevice.h
-    SMADevice.cpp
+    SMADevice/SMADevice.h
+    SMADevice/SMADevice.cpp
 )
 
 find_package(libmodbus CONFIG REQUIRED)

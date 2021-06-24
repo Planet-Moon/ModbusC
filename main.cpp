@@ -1,7 +1,7 @@
 #include <iostream>
-#include "hello.h"
-#include "ModbusDevice.h"
-#include "SMADevice.h"
+#include "hello/hello.h"
+#include "ModbusDevice/ModbusDevice.h"
+#include "SMADevice/SMADevice.h"
 
 int main(int argc, char** argv){
     // hello::hello_world();

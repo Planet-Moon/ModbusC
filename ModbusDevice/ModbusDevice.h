@@ -3,8 +3,8 @@
 #include <string>
 #include <map>
 #include <vector>
-#include "ModbusRegister.h"
-#include "ModbusDataTypes.h"
+#include "../ModbusRegister/ModbusRegister.h"
+#include "../ModbusDataTypes.h"
 
 namespace mbDevice{
 
