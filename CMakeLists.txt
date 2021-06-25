@@ -52,3 +52,4 @@ target_link_libraries(main PRIVATE hello)
 target_link_libraries(main PRIVATE ModbusDevice)
 target_link_libraries(main PRIVATE SMADevice)
 
+add_subdirectory(TemplateTests)
