@@ -1,6 +1,6 @@
 #pragma once
-#include "../ModbusDevice/ModbusDevice.h"
-#include "../ModbusRegister/ModbusRegister.h"
+#include <ModbusDevice.h>
+#include <ModbusRegister.h>
 
 namespace SMA{
     class Device: public mb::Device{
@@ -28,5 +28,7 @@ namespace SMA{
             mb::Register<long> mbSerialNumber;
             mb::Register<int> mbModel;
             mb::Register<long> mbRebootRegister;
+            mb::Register<long> mbMainsFeedIn;
+            mb::Register<long> mbMainsSupply;
     };
 }

@@ -1,20 +1,22 @@
 #include "SMADevice.h"
-#include "../ModbusRegister/ModbusRegister.h"
 #include <iostream>
 #include <cassert>
+#include <ModbusRegister.h>
 
 #define INIT_DEVICE_REGISTERS \
     mbDeviceInfo(this->connection, 42109, 4), \
     mbSerialNumber(this->connection, 30057, 2), \
     mbRebootRegister(this->connection, 40077, 2), \
-    mbModel(this->connection, 30057, 2)
+    mbModel(this->connection, 30057, 2), \
+    mbMainsFeedIn(this->connection, 30867, 2, 1, " W"), \
+    mbMainsSupply(this->connection, 30865, 2, 1, " W")
 
 
 namespace SMA{
     Device::Device(const char* ipAddress, int port):
         mb::Device(ipAddress, port),
         INIT_DEVICE_REGISTERS
-    {        
+    {
         deviceInit();
         return;
     }
@@ -56,7 +58,7 @@ namespace SMA{
         std::cout << "Test output" << std::endl;
         model_ = static_cast<unsigned int>(MODBUS_GET_INT32_FROM_INT16(mbModel.readRawData(&ret_val).data(),0));
         std::cout << "Model: " << model_ << ", valid: "<< ret_val << std::endl;
-        
+
         return;
     }
 }

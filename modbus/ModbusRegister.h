@@ -1,11 +1,11 @@
 #pragma once
 #include <modbus.h>
 #include <string>
-#include "stdint.h"
+#include <stdint.h>
 #include <vector>
 #include <cmath>
-#include "../Conversions/Conversions.h"
-#include "../ModbusDevice/ModbusDevice.h"
+#include <Conversions.h>
+#include <ModbusDevice.h>
 
 namespace mb{
 
@@ -41,7 +41,7 @@ namespace mb{
                 }
                 return data;
             }
-            
+
             void writeRawData(const std::vector<uint16_t>* input, bool* ret = nullptr) {
                 int status = modbus_write_registers(device, addr, nb, input->data());
                 if (ret) {

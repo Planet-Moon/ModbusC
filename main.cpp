@@ -1,9 +1,9 @@
 #include <iostream>
-#include "hello/hello.h"
-#include "ModbusDevice/ModbusDevice.h"
-#include "modbusRegister/ModbusRegister.h"
-#include "SMA/SMADevice.h"
-#include "SMA/SMAStorageBoy.h"
+#include <hello.h>
+#include <ModbusDevice.h>
+#include <ModbusRegister.h>
+#include <SMADevice.h>
+#include <SMAStorageBoy.h>
 
 int main(int argc, char** argv){
     hello::hello_world();
@@ -19,7 +19,7 @@ int main(int argc, char** argv){
 
     mb::Register<float> testRegister(heatingControl.connection, 45,1,0.1,"°C");
     std::cout << "testRegister: " + mb::printVector(testRegister.readRawData(&ret_val))+", status: "<< ret_val << std::endl;
-        
+
     SMA::Device smaDevice("192.168.178.113",502);
     smaDevice.test();
 
