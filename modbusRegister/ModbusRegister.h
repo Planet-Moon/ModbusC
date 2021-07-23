@@ -3,38 +3,59 @@
 #include <string>
 #include "stdint.h"
 #include <vector>
-#include "../ModbusDataTypes.h"
+#include <cmath>
+#include "../Conversions/Conversions.h"
+#include "../ModbusDevice/ModbusDevice.h"
 
-namespace mbDevice{
+namespace mb{
 
-    class ModbusRegister{
+    std::string printVector(std::vector<uint16_t> input);
+
+    template<class T>
+    class Register{
         public:
+            Register(modbus_t* device_, int addr_, int nb_ = 1, float factor_ = 1., std::string unit_ = "") :
+                device(device_),
+                addr(addr_),
+                nb(nb_),
+                factor(factor_),
+                unit(unit_),
+                data(std::vector<uint16_t>(nb, 0))
+            {
+                return;
+            }
             int addr;
             int nb;
             float factor;
-            mbDataType type;
             std::string unit;
-            ModbusRegister();
-            ModbusRegister(int addr, int nb=1, float factor=1., mbDataType type=mbDataType::UInt, std::string unit="");
-            std::vector<uint16_t> readRawData(modbus_t* mb);
-            void read(modbus_t* mb, bool&);
-            void read(modbus_t* mb, int&);
-            void read(modbus_t* mb, unsigned int&);
-            void read(modbus_t* mb, float&);
-            void read(modbus_t* mb, double&);
-            bool writeRawData(modbus_t* mb, const std::vector<uint16_t>* value);
-            bool write(modbus_t* mb, bool*);
-            bool write(modbus_t* mb, int*);
-            bool write(modbus_t* mb, unsigned int*);
-            bool write(modbus_t* mb, float*);
-            bool write(modbus_t* mb, double*);
-            bool write(modbus_t* mb, bool);
-            bool write(modbus_t* mb, int);
-            bool write(modbus_t* mb, unsigned int);
-            bool write(modbus_t* mb, float);
-            bool write(modbus_t* mb, double);
 
         private:
             std::vector<uint16_t> data;
+            modbus_t* device;
+
+        public:
+            std::vector<uint16_t> readRawData(bool* ret = nullptr) {
+                int status = modbus_read_registers(device, addr, nb, data.data());
+                if (ret) {
+                    *ret = status == nb;
+                }
+                return data;
+            }
+            
+            void writeRawData(const std::vector<uint16_t>* input, bool* ret = nullptr) {
+                int status = modbus_write_registers(device, addr, nb, input->data());
+                if (ret) {
+                    *ret = status == nb;
+                }
+            }
+
+            T getValue()
+            {
+                return T();
+            }
+
+            void setValue(T)
+            {
+            }
     };
 }
