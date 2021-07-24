@@ -1,6 +1,4 @@
-#include "ModbusRegister.h"
-#include "../Conversions/Conversions.h"
-#include <cmath>
+#include <ModbusRegister.h>
 
 namespace mb{
     std::string printVector(std::vector<uint16_t> input) {

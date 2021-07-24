@@ -11,24 +11,27 @@ namespace SMA{
             void reboot();
             void test();
 
+            int get_mainsFeedIn(bool* ret = nullptr);
+            int get_mainsSupply(bool* ret = nullptr);
+
         private:
             void deviceInit();
             void parseDeviceInfo();
 
         // properties
         public:
-            unsigned int serialNumber{ 0 };
+            unsigned int serialNumber_{ 0 };
 
         private:
             short slaveId_{ 3 };
-            unsigned short pysicalSusyId{ 0 };
-            unsigned int pysicalSerialNumber{ 0 };
+            unsigned short pysicalSusyId_{ 0 };
+            unsigned int pysicalSerialNumber_{ 0 };
             unsigned int model_{ 0 };
-            mb::Register<long long> mbDeviceInfo;
-            mb::Register<long> mbSerialNumber;
-            mb::Register<int> mbModel;
-            mb::Register<long> mbRebootRegister;
-            mb::Register<long> mbMainsFeedIn;
-            mb::Register<long> mbMainsSupply;
+            mb::Register<long long> deviceInfo;
+            mb::Register<unsigned int> serialNumber;
+            mb::Register<int> model;
+            mb::Register<int> rebootRegister;
+            mb::Register<int> mainsFeedIn;
+            mb::Register<int> mainsSupply;
     };
 }

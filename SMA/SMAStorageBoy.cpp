@@ -1,9 +1,19 @@
 #include "SMAStorageBoy.h"
 
 #define INIT_STORAGEBOY_REGISTERS \
-	mbPower(this->connection,30775,2,1," W"), \
-	mbDcWatt(this->connection,30773,2,1," W"), \
-	mbSoC(this->connection,30845,2)
+	power(this->connection,30775,1," W"), \
+	dcWatt(this->connection,30773,1," W"), \
+	soc(this->connection,30845,1," %")
+
+#define GENERATE_MB_GET_FUNC(type, mbRegister) \
+    type StorageBoy::get_##mbRegister(bool* ret){ \
+        return (##mbRegister.getValue(ret)); \
+    }
+
+#define GENERATE_MB_SET_FUNC(type, mbRegister) \
+    void StorageBoy::set_##mbRegister(type input, bool* ret){ \
+        ##mbRegister.setValue(input, ret); \
+    }
 
 namespace SMA {
 	StorageBoy::StorageBoy(const char* ipAddress, int port):
@@ -27,28 +37,21 @@ namespace SMA {
 		return MODBUS_GET_INT32_FROM_INT16(input.data(), 0);
 	}
 
-	int StorageBoy::readPower()
+	int StorageBoy::get_power(bool* ret)
 	{
-		int retval = registerToInt(mbPower.readRawData());
-		if (retval < 0)
-			retval = 0;
-		return retval;
+		int temp{power.getValue(ret)};
+		if(temp < 0)
+			temp = 0;
+		return temp;
 	}
 
-	int StorageBoy::readDcWatt()
+	int StorageBoy::get_dcWatt(bool* ret)
 	{
-		int retval = registerToInt(mbDcWatt.readRawData());
-		if (retval < 0)
-			retval = 0;
-		return retval;
+		int temp{dcWatt.getValue(ret)};
+		if(temp < 0)
+			temp = 0;
+		return temp;
 	}
 
-	int StorageBoy::readSoC()
-	{
-		int retval = registerToInt(mbSoC.readRawData());
-		if (retval < 0)
-			retval = 0;
-		return retval;
-	}
-
+	GENERATE_MB_GET_FUNC(int, soc)
 }

@@ -10,13 +10,13 @@ namespace SMA {
 			void storageBoyInit();
 
 		public:
-			int readPower();
-			int readDcWatt();
-			int readSoC();
+			int get_power(bool* ret = nullptr);
+			int get_dcWatt(bool* ret = nullptr);
+			int get_soc(bool* ret = nullptr);
 
-		private:
-			mb::Register<int> mbPower;
-			mb::Register<int> mbDcWatt;
-			mb::Register<int> mbSoC;
+		public:
+			mb::Register<int> power;
+			mb::Register<int> dcWatt;
+			mb::Register<int> soc;
 	};
 }
