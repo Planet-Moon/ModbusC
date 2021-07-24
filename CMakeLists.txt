@@ -13,39 +13,9 @@ add_library(
 )
 target_include_directories(hello PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/hello)
 
-add_library(
-    ModbusConversions
-    Conversions/Conversions.h
-    Conversions/Conversions.cpp
-)
-target_include_directories(ModbusConversions PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Conversions)
+add_subdirectory(modbus)
 
-add_library(
-    ModbusDevice
-    modbus/ModbusDevice.h
-    modbus/ModbusDevice.cpp
-    modbus/ModbusRegister.h
-    modbus/ModbusRegister.cpp
-)
-target_include_directories(ModbusDevice PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/modbus)
-find_package(libmodbus CONFIG REQUIRED)
-target_link_libraries(ModbusDevice PUBLIC modbus)
-target_link_libraries(ModbusDevice PUBLIC ModbusConversions)
-
-add_library(
-    SMADevice
-    SMA/SMADevice.h
-    SMA/SMADevice.cpp
-)
-target_link_libraries(SMADevice PUBLIC ModbusDevice)
-target_include_directories(SMADevice PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/SMA)
-
-add_library(
-    SMAStorageBoy
-    SMA/SMAStorageBoy.h
-    SMA/SMAStorageBoy.cpp
-)
-target_link_libraries(SMAStorageBoy PUBLIC SMADevice)
+add_subdirectory(SMA)
 
 add_executable(main main.cpp)
 target_link_libraries(main PRIVATE hello)
