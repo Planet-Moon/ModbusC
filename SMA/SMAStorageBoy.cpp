@@ -7,12 +7,17 @@
 
 #define GENERATE_MB_GET_FUNC(type, mbRegister) \
     type StorageBoy::get_##mbRegister(bool* ret){ \
+        connection_semaphore->acquire(); \
+        type retval = ##mbRegister.getValue(ret); \
+        connection_semaphore->release(); \
         return (##mbRegister.getValue(ret)); \
     }
 
 #define GENERATE_MB_SET_FUNC(type, mbRegister) \
     void StorageBoy::set_##mbRegister(type input, bool* ret){ \
+        connection_semaphore->acquire(); \
         ##mbRegister.setValue(input, ret); \
+        connection_semaphore->release(); \
     }
 
 namespace SMA {
