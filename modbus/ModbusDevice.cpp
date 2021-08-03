@@ -26,8 +26,8 @@ namespace mb{
     }
 
     Device::~Device(){
-        disconnect();
         stop_thread();
+        disconnect();
         #ifdef DEBUG
             std::cerr << "modbus device "+ ipAddress + ":" << port << " destroyed" << std::endl;
         #endif // DEBUG
