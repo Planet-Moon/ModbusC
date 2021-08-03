@@ -33,5 +33,6 @@ namespace SMA{
             mb::Register<int> rebootRegister;
             mb::Register<int> mainsFeedIn;
             mb::Register<int> mainsSupply;
+            void test_connection() override;
     };
 }

@@ -13,12 +13,17 @@
 
 #define GENERATE_MB_GET_FUNC(type, mbRegister) \
     type Device::get_##mbRegister(bool* ret){ \
+        connection_semaphore->acquire(); \
+        type retval = ##mbRegister.getValue(ret); \
+        connection_semaphore->release(); \
         return (##mbRegister.getValue(ret)); \
     }
 
 #define GENERATE_MB_SET_FUNC(type, mbRegister) \
     void Device::set_##mbRegister(type input, bool* ret){ \
+        connection_semaphore->acquire(); \
         ##mbRegister.setValue(input, ret); \
+        connection_semaphore->release(); \
     }
 
 
@@ -42,8 +47,11 @@ namespace SMA{
     void Device::deviceInit()
     {
         parseDeviceInfo();
+        start_thread();
+        connection_semaphore->acquire();
         serialNumber_ = static_cast<unsigned int>(MODBUS_GET_INT32_FROM_INT16(serialNumber.readRawData().data(), 0));
         model_ = static_cast<unsigned int>(MODBUS_GET_INT32_FROM_INT16(model.readRawData().data(), 0));
+        connection_semaphore->release();
         return;
     }
 
@@ -51,7 +59,9 @@ namespace SMA{
     {
         assert(modbus_set_slave(this->connection, 1) == 0);
         bool valid = false;
+        connection_semaphore->acquire();
         std::vector<uint16_t> return_value = deviceInfo.readRawData(&valid);
+        connection_semaphore->release();
         assert(("error reading device info",valid));
         slaveId_ = return_value[3];
         pysicalSusyId_ = static_cast<unsigned short>(return_value[2]);
@@ -64,15 +74,36 @@ namespace SMA{
     GENERATE_MB_GET_FUNC(int, mainsSupply);
 
     void Device::reboot(){
+        if(online){
+            mb::Register<int> reboot(this->connection,40077);
+            connection_semaphore->acquire();
+            reboot.setValue(1146);
+            connection_semaphore->release();
+            online = false;
+            stop_thread();
+            disconnect();
+            while(!online){
+                connect(ipAddress.c_str(), port);
+            }
+            start_thread();
+        }
+        return;
     }
 
     void Device::test()
     {
         bool ret_val = false;
         std::cout << "Test output" << std::endl;
+        connection_semaphore->acquire();
         model_ = static_cast<unsigned int>(MODBUS_GET_INT32_FROM_INT16(model.readRawData(&ret_val).data(),0));
+        connection_semaphore->release();
         std::cout << "Model: " << model_ << ", valid: "<< ret_val << std::endl;
-
         return;
+    }
+
+    void Device::test_connection()
+    {
+        unsigned int model_temp = static_cast<unsigned int>(MODBUS_GET_INT32_FROM_INT16(model.readRawData().data(), 0));
+        online = model_temp == model_;
     }
 }
