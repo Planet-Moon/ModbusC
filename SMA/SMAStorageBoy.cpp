@@ -44,7 +44,9 @@ namespace SMA {
 
 	int StorageBoy::get_power(bool* ret)
 	{
+		connection_semaphore->acquire();
 		int temp{power.getValue(ret)};
+		connection_semaphore->release();
 		if(temp < 0)
 			temp = 0;
 		return temp;
@@ -52,7 +54,9 @@ namespace SMA {
 
 	int StorageBoy::get_dcWatt(bool* ret)
 	{
+		connection_semaphore->acquire();
 		int temp{dcWatt.getValue(ret)};
+		connection_semaphore->release();
 		if(temp < 0)
 			temp = 0;
 		return temp;
