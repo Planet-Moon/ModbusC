@@ -2,19 +2,24 @@
 #include <exception>
 #include <ModbusDevice.h>
 #include <chrono>
+#include <exception>
 
 namespace mb{
 
     void Device::init(const char* ipAddress_, int port_){
-        connection_semaphore = new std::binary_semaphore(1);
         ipAddress = ipAddress_;
         port = port_;
         connect(ipAddress.c_str(), port);
-        test_connection_run = true;
     }
 
     void Device::start_thread(){
-        check_online_thread = new std::thread(&Device::test_connection_wrapper, this);
+        if(test_connection_run == false){
+            test_connection_run = true;
+            check_online_thread = new std::thread(&Device::test_connection_wrapper, this);
+            #ifdef DEBUG
+                std::cerr << "modbus connection " + ipAddress + ":" << port << " thread started" << std::endl;
+            #endif // DEBUG
+        }
     }
 
     Device::Device(const char* ipAddress_, int port_/*=502*/){
@@ -34,11 +39,15 @@ namespace mb{
     }
 
     void Device::stop_thread(){
-        test_connection_run = false;
-        check_online_thread->join();
-        #ifdef DEBUG
-            std::cerr << "modbus connection " + ipAddress + ":" << port << " thread stopped"<< std::endl;
-        #endif // DEBUG
+        if(test_connection_run){
+            std::thread::id thread_id = check_online_thread->get_id();
+            if(check_online_thread->joinable())
+                test_connection_run = false;
+                check_online_thread->join();
+            #ifdef DEBUG
+                std::cerr << "modbus connection " + ipAddress + ":" << port << " thread stopped"<< std::endl;
+            #endif // DEBUG
+        }
     }
 
     bool Device::connect(const char* ipAddress_, int port_){
@@ -108,9 +117,7 @@ namespace mb{
             std::cerr << "modbus connection " + ipAddress + ":" << port << " thread started"<< std::endl;
         #endif // DEBUG
         while(test_connection_run){
-            connection_semaphore->acquire();
             test_connection();
-            connection_semaphore->release();
             std::this_thread::sleep_for(std::chrono::milliseconds(2000));
         }
     }

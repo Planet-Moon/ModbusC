@@ -7,6 +7,7 @@
 #include <cassert>
 
 int main(int argc, char** argv){
+
     hello::hello_world();
     mb::Device heatingControl("192.168.178.107",502);
 
@@ -28,19 +29,13 @@ int main(int argc, char** argv){
     float testDiff = abs(testValueRet - testValue);
     assert(testDiff <= testRegister.factor);
 
-    {
-        SMA::Device smaDevice("192.168.178.113",502);
-        smaDevice.test();
-    }
-    {
-        SMA::StorageBoy storageBoy("192.168.178.113", 502);
-        std::cout << "Power: " << storageBoy.get_power() << std::endl;
-        std::cout << "DcWatt: " << storageBoy.get_dcWatt() << std::endl;
-        std::cout << "SoC: " << storageBoy.get_soc() << std::endl;
-        std::cout << "mainsFeedIn: " << storageBoy.get_mainsFeedIn() << std::endl;
-        std::cout << "mainsSupply: " << storageBoy.get_mainsSupply() << std::endl;
-        int soc_ = storageBoy.soc.getValue();
-    }
+    SMA::StorageBoy storageBoy("192.168.178.113", 502);
+    std::cout << "Power: " << storageBoy.get_power() << std::endl;
+    std::cout << "DcWatt: " << storageBoy.get_dcWatt() << std::endl;
+    std::cout << "SoC: " << storageBoy.get_soc() << std::endl;
+    std::cout << "mainsFeedIn: " << storageBoy.get_mainsFeedIn() << std::endl;
+    std::cout << "mainsSupply: " << storageBoy.get_mainsSupply() << std::endl;
+    int soc_ = storageBoy.soc.getValue();
 
     SMA::Device sunnyBoy("192.168.178.128", 502);
     return 0;

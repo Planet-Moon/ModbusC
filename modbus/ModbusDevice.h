@@ -5,7 +5,6 @@
 #include <vector>
 
 #include <thread>
-#include <semaphore>
 
 namespace mb{
 
@@ -27,14 +26,13 @@ namespace mb{
             void test_all_registers();
             void init(const char* ipAddress, int port = 502);
             std::thread* check_online_thread;
-            bool test_connection_run;
+            bool test_connection_run = false;
             void test_connection_wrapper();
 
         protected:
             virtual void test_connection();
             void start_thread();
             void stop_thread();
-            std::binary_semaphore* connection_semaphore;
     };
 
     void test_modbus();
