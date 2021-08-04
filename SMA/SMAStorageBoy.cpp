@@ -7,13 +7,18 @@
 
 #define GENERATE_MB_GET_FUNC(type, mbRegister) \
     type StorageBoy::get_##mbRegister(bool* ret){ \
-        type retval = ##mbRegister.getValue(ret); \
-        return (##mbRegister.getValue(ret)); \
+        type retval = 0; \
+		if(online){ \
+			retval = ##mbRegister.getValue(ret); \
+		} \
+        return (retval); \
     }
 
 #define GENERATE_MB_SET_FUNC(type, mbRegister) \
     void StorageBoy::set_##mbRegister(type input, bool* ret){ \
-        ##mbRegister.setValue(input, ret); \
+		if(online){ \
+        	##mbRegister.setValue(input, ret); \
+		} \
     }
 
 namespace SMA {
@@ -40,19 +45,26 @@ namespace SMA {
 
 	int StorageBoy::get_power(bool* ret)
 	{
-		int temp{power.getValue(ret)};
-		if(temp < 0)
+		int temp = 0;
+		if(online){
+			temp = power.getValue(ret);
+		}
+		if(temp < 0){
 			temp = 0;
+		}
 		return temp;
 	}
 
 	int StorageBoy::get_dcWatt(bool* ret)
 	{
-		int temp{dcWatt.getValue(ret)};
+		int temp = 0;
+		if(online){
+			temp = dcWatt.getValue(ret);
+		}
 		if(temp < 0)
 			temp = 0;
 		return temp;
 	}
 
-	GENERATE_MB_GET_FUNC(int, soc)
+	GENERATE_MB_GET_FUNC(int, soc);
 }

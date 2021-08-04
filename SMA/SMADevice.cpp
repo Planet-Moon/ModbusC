@@ -14,13 +14,18 @@
 
 #define GENERATE_MB_GET_FUNC(type, mbRegister) \
     type Device::get_##mbRegister(bool* ret){ \
-        type retval = ##mbRegister.getValue(ret); \
-        return (##mbRegister.getValue(ret)); \
+        type retval = 0; \
+        if(online){ \
+            retval = ##mbRegister.getValue(ret); \
+        } \
+        return (retval); \
     }
 
 #define GENERATE_MB_SET_FUNC(type, mbRegister) \
     void Device::set_##mbRegister(type input, bool* ret){ \
-        ##mbRegister.setValue(input, ret); \
+        if(online){ \
+            ##mbRegister.setValue(input, ret); \
+        } \
     }
 
 
@@ -45,12 +50,15 @@ namespace SMA{
     {
         try {
             parseDeviceInfo();
+            online = true;
+            bool test{false};
+            serialNumber_ = static_cast<unsigned int>(MODBUS_GET_INT32_FROM_INT16(serialNumber.readRawData(&test).data(), 0));
+            model_ = static_cast<unsigned int>(MODBUS_GET_INT32_FROM_INT16(model.readRawData(&test).data(), 0));
             start_thread();
-            serialNumber_ = static_cast<unsigned int>(MODBUS_GET_INT32_FROM_INT16(serialNumber.readRawData().data(), 0));
-            model_ = static_cast<unsigned int>(MODBUS_GET_INT32_FROM_INT16(model.readRawData().data(), 0));
         }
         catch (std::exception& e){
             std::cerr << e.what() << std::endl;
+            online = false;
         }
         return;
     }
@@ -58,10 +66,10 @@ namespace SMA{
     void Device::parseDeviceInfo()
     {
         std::runtime_error connection_exception("SMADevice "+ipAddress+":"+std::to_string(port)+ " not reachable");
-        if(modbus_set_slave(this->connection, 1) == 0){
+        if(modbus_set_slave(this->connection, 1) != 0){
             throw connection_exception;
         }
-        bool valid = false;
+        bool valid{false};
         std::vector<uint16_t> return_value = deviceInfo.readRawData(&valid);
         if(!valid){
             throw connection_exception;
@@ -69,7 +77,7 @@ namespace SMA{
         slaveId_ = return_value[3];
         pysicalSusyId_ = static_cast<unsigned short>(return_value[2]);
         pysicalSerialNumber_ = static_cast<unsigned int>(MODBUS_GET_INT32_FROM_INT16(return_value.data(), 0));
-        if(modbus_set_slave(this->connection, slaveId_) == 0){
+        if(modbus_set_slave(this->connection, slaveId_) != 0){
             throw connection_exception;
         }
     }
@@ -97,14 +105,24 @@ namespace SMA{
     {
         bool ret_val = false;
         std::cout << "Test output" << std::endl;
-        model_ = static_cast<unsigned int>(MODBUS_GET_INT32_FROM_INT16(model.readRawData(&ret_val).data(),0));
-        std::cout << "Model: " << model_ << ", valid: "<< ret_val << std::endl;
+        if(online){
+            model_ = static_cast<unsigned int>(MODBUS_GET_INT32_FROM_INT16(model.readRawData(&ret_val).data(),0));
+            std::cout << "Model: " << model_ << ", valid: "<< ret_val << std::endl;
+        }
+        else{
+            std::cout << "not online";
+        }
         return;
     }
 
     void Device::test_connection()
     {
-        unsigned int model_temp = static_cast<unsigned int>(MODBUS_GET_INT32_FROM_INT16(model.readRawData().data(), 0));
+        unsigned int model_temp = static_cast<unsigned int>(
+            MODBUS_GET_INT32_FROM_INT16(
+                model.readRawData().data(),
+                0
+            )
+        );
         online = model_temp == model_;
     }
 }

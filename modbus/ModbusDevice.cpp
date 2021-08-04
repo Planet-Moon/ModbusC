@@ -72,9 +72,7 @@ namespace mb{
     }
 
     bool Device::disconnect(){
-        if(online){
-            modbus_close(connection);
-        }
+        modbus_close(connection);
         modbus_free(connection);
         connection = nullptr;
         online = false;
@@ -117,8 +115,11 @@ namespace mb{
             std::cerr << "modbus connection " + ipAddress + ":" << port << " thread started"<< std::endl;
         #endif // DEBUG
         while(test_connection_run){
+            #ifdef DEBUG
+                std::cerr << "modbus connection " + ipAddress + ":" << port << " thread running"<< std::endl;
+            #endif // DEBUG
             test_connection();
-            std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+            std::this_thread::sleep_for(std::chrono::milliseconds(3000));
         }
     }
 

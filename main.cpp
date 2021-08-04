@@ -5,6 +5,7 @@
 #include <SMADevice.h>
 #include <SMAStorageBoy.h>
 #include <cassert>
+#include <chrono>
 
 int main(int argc, char** argv){
 
@@ -30,13 +31,19 @@ int main(int argc, char** argv){
     assert(testDiff <= testRegister.factor);
 
     SMA::StorageBoy storageBoy("192.168.178.113", 502);
-    std::cout << "Power: " << storageBoy.get_power() << std::endl;
-    std::cout << "DcWatt: " << storageBoy.get_dcWatt() << std::endl;
-    std::cout << "SoC: " << storageBoy.get_soc() << std::endl;
-    std::cout << "mainsFeedIn: " << storageBoy.get_mainsFeedIn() << std::endl;
-    std::cout << "mainsSupply: " << storageBoy.get_mainsSupply() << std::endl;
-    int soc_ = storageBoy.soc.getValue();
+
+    for(int i = 0; i <8; ++i){
+        std::cout << "Power: " << storageBoy.get_power() << std::endl;
+        std::cout << "DcWatt: " << storageBoy.get_dcWatt() << std::endl;
+        std::cout << "SoC: " << storageBoy.get_soc() << std::endl;
+        std::cout << "mainsFeedIn: " << storageBoy.get_mainsFeedIn() << std::endl;
+        std::cout << "mainsSupply: " << storageBoy.get_mainsSupply() << std::endl;
+        int soc_ = storageBoy.soc.getValue();
+        std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+        std::cout << i << "-------------------------" << std::endl;
+    }
 
     SMA::Device sunnyBoy("192.168.178.128", 502);
+
     return 0;
 }
