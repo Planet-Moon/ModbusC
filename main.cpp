@@ -48,24 +48,35 @@ int main(int argc, char** argv){
     assert(testDiff <= testRegister.factor);
 
     SMA::StorageBoy storageBoy("192.168.178.113", 502);
+    SMA::Device sunnyBoy("192.168.178.128", 502);
 
     for(int i = 0; i <8000 && run_test; ++i){
         std::cout << i << "-------------------------" << std::endl;
-        int test_slaveId = modbus_get_slave(storageBoy.connection);
+        std::cout << "->sunnyBoy" << std::endl;
+        sunnyBoy.testRead();
+        volatile int sunnyBoy_slaveId = modbus_get_slave(sunnyBoy.connection);
+        volatile int sunnyBoy_power = sunnyBoy.get_power();
+        volatile int sunnyBoy_dcWatt = sunnyBoy.get_dcWatt();
+        volatile int sunnyBoy_mainsFeedIn = sunnyBoy.get_mainsFeedIn();
+        volatile int sunnyBoy_mainsSupply = sunnyBoy.get_mainsSupply();
+        volatile bool sunnyBoy_online = sunnyBoy.online;
+
+        std::cout << "->storageBoy" << std::endl;
         storageBoy.testRead();
-        volatile int test_power = storageBoy.get_power();
-        volatile int test_dcWatt = storageBoy.get_dcWatt();
-        volatile unsigned int test_soc = storageBoy.get_soc();
-        volatile unsigned int test_dischargeCurrent = storageBoy.get_dischargeCurrent();
-        volatile unsigned int test_chargeCurrent = storageBoy.get_chargeCurrent();
-        volatile unsigned int test_maxDischargeCurrent = storageBoy.get_maxDischargeCurrent();
-        volatile unsigned int test_maxChargeCurrent = storageBoy.get_maxChargeCurrent();
-        volatile bool test_online = storageBoy.online;
+        volatile int storageBoy_slaveId = modbus_get_slave(storageBoy.connection);
+        volatile int storageBoy_power = storageBoy.get_power();
+        volatile int storageBoy_dcWatt = storageBoy.get_dcWatt();
+        volatile unsigned int storageBoy_soc = storageBoy.get_soc();
+        volatile unsigned int storageBoy_dischargeCurrent = storageBoy.get_dischargeCurrent();
+        volatile unsigned int storageBoy_chargeCurrent = storageBoy.get_chargeCurrent();
+        volatile unsigned int storageBoy_maxDischargeCurrent = storageBoy.get_maxDischargeCurrent();
+        volatile unsigned int storageBoy_maxChargeCurrent = storageBoy.get_maxChargeCurrent();
+        volatile unsigned int storageBoy_mainsFeedIn = sunnyBoy.get_mainsFeedIn();
+        volatile unsigned int storageBoy_mainsSupply = sunnyBoy.get_mainsSupply();
+        volatile bool storageBoy_online = storageBoy.online;
         std::this_thread::sleep_for(std::chrono::milliseconds(5000));
         std::cout << i << "+++---+++---+++---+++---" << std::endl;
     }
-
-    SMA::Device sunnyBoy("192.168.178.128", 502);
 
     return 0;
 }
