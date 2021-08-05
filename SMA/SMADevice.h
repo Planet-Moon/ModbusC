@@ -11,8 +11,12 @@ namespace SMA{
             void reboot();
             void test();
 
+            int get_power(bool* ret = nullptr);
+			int get_dcWatt(bool* ret = nullptr);
             int get_mainsFeedIn(bool* ret = nullptr);
             int get_mainsSupply(bool* ret = nullptr);
+
+            void testRead(bool* ret = nullptr);
 
         private:
             void deviceInit();
@@ -31,8 +35,13 @@ namespace SMA{
             mb::Register<unsigned int> serialNumber;
             mb::Register<int> model;
             mb::Register<int> rebootRegister;
+			mb::Register<int> power;
+			mb::Register<int> dcWatt;
             mb::Register<int> mainsFeedIn;
             mb::Register<int> mainsSupply;
+
             void test_connection() override;
+
+
     };
 }

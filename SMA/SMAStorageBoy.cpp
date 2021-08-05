@@ -2,8 +2,6 @@
 #include <iostream>
 
 #define INIT_STORAGEBOY_REGISTERS \
-	power(this->connection,30775,1," W"), \
-	dcWatt(this->connection,30773,1," W"), \
 	soc(this->connection,30845,1," %"), \
 	chargeCurrent(this->connection,31393,1," W"), \
 	dischargeCurrent(this->connection,31395,1," W"), \
@@ -43,34 +41,6 @@ namespace SMA {
 	{
 	}
 
-	int registerToInt(std::vector<uint16_t> input)
-	{
-		return MODBUS_GET_INT32_FROM_INT16(input.data(), 0);
-	}
-
-	int StorageBoy::get_power(bool* ret)
-	{
-		int temp = 0;
-		if(online){
-			temp = power.getValue(ret);
-		}
-		if(temp < 0){
-			temp = 0;
-		}
-		return temp;
-	}
-
-	int StorageBoy::get_dcWatt(bool* ret)
-	{
-		int temp = 0;
-		if(online){
-			temp = dcWatt.getValue(ret);
-		}
-		if(temp < 0)
-			temp = 0;
-		return temp;
-	}
-
 	GENERATE_MB_GET_FUNC(unsigned int, soc);
 	GENERATE_MB_GET_FUNC(unsigned int, dischargeCurrent);
 	GENERATE_MB_GET_FUNC(unsigned int, chargeCurrent);
@@ -82,6 +52,8 @@ namespace SMA {
 		std::cout << "online start: " << online << std::endl;
 		std::cout << "power: " << get_power(ret) << std::endl;
 		std::cout << "dcWatt: " << get_dcWatt(ret) << std::endl;
+		std::cout << "mainsFeedIn: " << get_mainsFeedIn(ret) << std::endl;
+		std::cout << "mainsSupply: " << get_mainsSupply(ret) << std::endl;
 		std::cout << "soc: " << get_soc(ret) << std::endl;
 		std::cout << "dischargeCurrent: " << get_dischargeCurrent(ret) << std::endl;
 		std::cout << "chargeCurrent: " << get_chargeCurrent(ret) << std::endl;

@@ -9,6 +9,8 @@
     serialNumber(this->connection, 30057), \
     rebootRegister(this->connection, 40077), \
     model(this->connection, 30057), \
+	power(this->connection,30775,1," W"), \
+	dcWatt(this->connection,30773,1," W"), \
     mainsFeedIn(this->connection, 30867, 1, " W"), \
     mainsSupply(this->connection, 30865, 1, " W")
 
@@ -82,6 +84,29 @@ namespace SMA{
         }
     }
 
+    int Device::get_power(bool* ret)
+	{
+		int temp = 0;
+		if(online){
+			temp = power.getValue(ret);
+		}
+		if(temp < 0){
+			temp = 0;
+		}
+		return temp;
+	}
+
+	int Device::get_dcWatt(bool* ret)
+	{
+		int temp = 0;
+		if(online){
+			temp = dcWatt.getValue(ret);
+		}
+		if(temp < 0)
+			temp = 0;
+		return temp;
+	}
+
     GENERATE_MB_GET_FUNC(int, mainsFeedIn);
 
     GENERATE_MB_GET_FUNC(int, mainsSupply);
@@ -128,4 +153,14 @@ namespace SMA{
             throw std::runtime_error("SMADevice "+ipAddress+":"+std::to_string(port)+ " not reachable");
         }
     }
+
+    void Device::testRead(bool* ret /* = nullptr */)
+	{
+		std::cout << "online start: " << online << std::endl;
+		std::cout << "power: " << get_power(ret) << std::endl;
+		std::cout << "dcWatt: " << get_dcWatt(ret) << std::endl;
+		std::cout << "mainsFeedIn: " << get_mainsFeedIn(ret) << std::endl;
+		std::cout << "mainsSupply: " << get_mainsSupply(ret) << std::endl;
+		std::cout << "online end: " << online << std::endl;
+	}
 }
