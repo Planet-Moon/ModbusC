@@ -6,8 +6,25 @@
 #include <SMAStorageBoy.h>
 #include <cassert>
 #include <chrono>
+#include <signal.h>
+
+
+bool run_test = true;
+
+void signal_handler(int signal)
+{
+    if(signal != SIGINT){
+        return;
+    }
+    else{
+        run_test = false;
+        std::cout<<"stopping test"<<std::endl;
+    }
+}
 
 int main(int argc, char** argv){
+
+    signal(SIGINT, signal_handler);
 
     hello::hello_world();
     mb::Device heatingControl("192.168.178.107",502);
@@ -32,15 +49,20 @@ int main(int argc, char** argv){
 
     SMA::StorageBoy storageBoy("192.168.178.113", 502);
 
-    for(int i = 0; i <8; ++i){
-        std::cout << "Power: " << storageBoy.get_power() << std::endl;
-        std::cout << "DcWatt: " << storageBoy.get_dcWatt() << std::endl;
-        std::cout << "SoC: " << storageBoy.get_soc() << std::endl;
-        std::cout << "mainsFeedIn: " << storageBoy.get_mainsFeedIn() << std::endl;
-        std::cout << "mainsSupply: " << storageBoy.get_mainsSupply() << std::endl;
-        int soc_ = storageBoy.soc.getValue();
-        std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+    for(int i = 0; i <8000 && run_test; ++i){
         std::cout << i << "-------------------------" << std::endl;
+        int test_slaveId = modbus_get_slave(storageBoy.connection);
+        storageBoy.testRead();
+        volatile int test_power = storageBoy.get_power();
+        volatile int test_dcWatt = storageBoy.get_dcWatt();
+        volatile unsigned int test_soc = storageBoy.get_soc();
+        volatile unsigned int test_dischargeCurrent = storageBoy.get_dischargeCurrent();
+        volatile unsigned int test_chargeCurrent = storageBoy.get_chargeCurrent();
+        volatile unsigned int test_maxDischargeCurrent = storageBoy.get_maxDischargeCurrent();
+        volatile unsigned int test_maxChargeCurrent = storageBoy.get_maxChargeCurrent();
+        volatile bool test_online = storageBoy.online;
+        std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+        std::cout << i << "+++---+++---+++---+++---" << std::endl;
     }
 
     SMA::Device sunnyBoy("192.168.178.128", 502);

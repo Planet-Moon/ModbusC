@@ -124,5 +124,8 @@ namespace SMA{
             )
         );
         online = model_temp == model_;
+        if(!online){
+            throw std::runtime_error("SMADevice "+ipAddress+":"+std::to_string(port)+ " not reachable");
+        }
     }
 }

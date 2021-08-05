@@ -1,9 +1,14 @@
 #include "SMAStorageBoy.h"
+#include <iostream>
 
 #define INIT_STORAGEBOY_REGISTERS \
 	power(this->connection,30775,1," W"), \
 	dcWatt(this->connection,30773,1," W"), \
-	soc(this->connection,30845,1," %")
+	soc(this->connection,30845,1," %"), \
+	chargeCurrent(this->connection,31393,1," W"), \
+	dischargeCurrent(this->connection,31395,1," W"), \
+	maxChargeCurrent(this->connection,40189,1," W"), \
+	maxDischargeCurrent(this->connection,40191,1," W")
 
 #define GENERATE_MB_GET_FUNC(type, mbRegister) \
     type StorageBoy::get_##mbRegister(bool* ret){ \
@@ -66,5 +71,22 @@ namespace SMA {
 		return temp;
 	}
 
-	GENERATE_MB_GET_FUNC(int, soc);
+	GENERATE_MB_GET_FUNC(unsigned int, soc);
+	GENERATE_MB_GET_FUNC(unsigned int, dischargeCurrent);
+	GENERATE_MB_GET_FUNC(unsigned int, chargeCurrent);
+	GENERATE_MB_GET_FUNC(unsigned int, maxDischargeCurrent);
+	GENERATE_MB_GET_FUNC(unsigned int, maxChargeCurrent);
+
+	void StorageBoy::testRead(bool* ret /* = nullptr */)
+	{
+		std::cout << "online start: " << online << std::endl;
+		std::cout << "power: " << get_power(ret) << std::endl;
+		std::cout << "dcWatt: " << get_dcWatt(ret) << std::endl;
+		std::cout << "soc: " << get_soc(ret) << std::endl;
+		std::cout << "dischargeCurrent: " << get_dischargeCurrent(ret) << std::endl;
+		std::cout << "chargeCurrent: " << get_chargeCurrent(ret) << std::endl;
+		std::cout << "maxDischargeCurrent: " << get_maxDischargeCurrent(ret) << std::endl;
+		std::cout << "maxChargeCurrent: " << get_maxChargeCurrent(ret) << std::endl;
+		std::cout << "online end: " << online << std::endl;
+	}
 }
