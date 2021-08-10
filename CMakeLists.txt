@@ -26,3 +26,5 @@ target_link_libraries(main PRIVATE SMADevice)
 target_link_libraries(main PRIVATE SMAStorageBoy)
 
 add_subdirectory(TemplateTests)
+
+add_subdirectory(thread_test)
