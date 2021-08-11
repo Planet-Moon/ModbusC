@@ -1,7 +1,9 @@
 {
-    "name": "modbus-example",
-    "version": "0.0.1",
+  "name": "modbus-example",
+  "version": "0.0.1",
   "dependencies": [
-    "libmodbus"
+    "libmodbus",
+    "paho-mqtt",
+    "paho-mqttpp3"
   ]
 }

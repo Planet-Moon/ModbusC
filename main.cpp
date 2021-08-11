@@ -4,6 +4,7 @@
 #include <ModbusRegister.h>
 #include <SMADevice.h>
 #include <SMAStorageBoy.h>
+#include <MqttClient.h>
 #include <cassert>
 #include <chrono>
 #include <signal.h>
@@ -47,10 +48,18 @@ int main(int argc, char** argv){
     float testDiff = abs(testValueRet - testValue);
     assert(testDiff <= testRegister.factor);
 
+    myMqtt::Client mqttClient("tcp://192.168.178.107:1883", "cpp_test_client");
+    mqttClient.subscribe("testTopic1/#", 1);
+    mqttClient.subscribe("testTopic2/#", 1);
+    mqttClient.publish("testTopic1", "Hello world1!", 1);
+    mqttClient.publish("testTopic2", "Hello world2!", 1);
+
+    return 0;
+
     SMA::StorageBoy storageBoy("192.168.178.113", 502);
     SMA::Device sunnyBoy("192.168.178.128", 502);
 
-    for(int i = 0; i <8000 && run_test; ++i){
+    for(int i = 0; i <8 && run_test; ++i){
         std::cout << i << "-------------------------" << std::endl;
         std::cout << "->sunnyBoy" << std::endl;
         sunnyBoy.testRead();

@@ -1,9 +1,12 @@
 cmake_minimum_required(VERSION 3.20)
 
+set(VCPKG_TARGET_TRIPLET x64-windows)
+# set(VCPKG_TARGET_TRIPLET x64-windows-static)
+
 set(CMAKE_TOOLCHAIN_FILE "E:/Users/Andreas/Andreas/Private Elektronik/Cpp/vcpkg/scripts/buildsystems/vcpkg.cmake")
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 
 project(main)
 
@@ -20,10 +23,13 @@ add_subdirectory(modbus)
 
 add_subdirectory(SMA)
 
+add_subdirectory(Mqtt)
+
 add_executable(main main.cpp)
 target_link_libraries(main PRIVATE hello)
 target_link_libraries(main PRIVATE SMADevice)
 target_link_libraries(main PRIVATE SMAStorageBoy)
+target_link_libraries(main PRIVATE mqtt)
 
 add_subdirectory(TemplateTests)
 
