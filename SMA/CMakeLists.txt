@@ -20,3 +20,11 @@ add_library(
     SMAStorageBoy.cpp
 )
 target_link_libraries(SMAStorageBoy PUBLIC SMADevice)
+
+add_library(
+    SMADeviceMqtt
+    SMADeviceMqtt.h
+    SMADeviceMqtt.cpp
+)
+target_link_libraries(SMADeviceMqtt PUBLIC SMADevice)
+target_link_libraries(SMADeviceMqtt PUBLIC mqtt)
