@@ -13,6 +13,8 @@ add_library(
 )
 target_include_directories(mqtt PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
+target_compile_definitions(mqtt PUBLIC MQTT_LIB)
+
 find_package(OpenSSL REQUIRED)
 target_link_libraries(mqtt PRIVATE OpenSSL::SSL OpenSSL::Crypto)
 
