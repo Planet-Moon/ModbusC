@@ -130,7 +130,7 @@ namespace myMqtt {
         #endif // DEBUG
     }
 
-    void Client::publish(std::string topic, std::string message, int qos, bool retain /* = false */)
+    void Client::publish(std::string topic, std::string message, int qos /* = 0 */, bool retain /* = false */)
     {
         #ifdef DEBUG
         std::cout << "Sending message {\"topic\":\""+topic+"\",\"message\":\""+message+"\", \"qos\":"<<qos<<", \"retain\":"<<retain<<"}" << std::endl;

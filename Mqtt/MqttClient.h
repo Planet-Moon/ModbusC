@@ -66,7 +66,7 @@ namespace myMqtt{
         ~Client();
         void connect(const std::string& serverURI, const std::string& clientURI, mqtt::connect_options connOpts);
         void disconnect();
-        void publish(std::string topic, std::string message, int qos, bool retain = false);
+        void publish(std::string topic, std::string message, int qos = 0, bool retain = false);
         void subscribe(std::string topic, int qos);
         void resubscribeToAll();
         void unsubscribe(std::string topic);
