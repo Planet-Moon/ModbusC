@@ -22,9 +22,24 @@ add_library(
 target_link_libraries(SMAStorageBoy PUBLIC SMADevice)
 
 add_library(
+    SMAMqttInterface
+    SMAMqttInterface.h
+    SMAMqttInterface.cpp
+)
+target_link_libraries(SMAMqttInterface PUBLIC mqtt)
+
+add_library(
     SMADeviceMqtt
     SMADeviceMqtt.h
     SMADeviceMqtt.cpp
 )
 target_link_libraries(SMADeviceMqtt PUBLIC SMADevice)
-target_link_libraries(SMADeviceMqtt PUBLIC mqtt)
+target_link_libraries(SMADeviceMqtt PUBLIC SMAMqttInterface)
+
+add_library(
+    SMAStorageBoyMqtt
+    SMAStorageBoyMqtt.h
+    SMAStorageBoyMqtt.cpp
+)
+target_link_libraries(SMAStorageBoyMqtt PUBLIC SMAStorageBoy)
+target_link_libraries(SMAStorageBoyMqtt PUBLIC SMAMqttInterface)

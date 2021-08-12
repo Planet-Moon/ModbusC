@@ -1,7 +1,9 @@
+#pragma once
 #include "SMADevice.h"
 
 namespace SMA {
-	class StorageBoy : public Device {
+	class StorageBoy : virtual public Device
+	{
 		public:
 			StorageBoy(const char* ipAddress, int port = 502);
 			StorageBoy(std::string ipAddress, int port = 502);

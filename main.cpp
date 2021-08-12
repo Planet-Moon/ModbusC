@@ -5,6 +5,7 @@
 #include <SMADevice.h>
 #include <SMADeviceMqtt.h>
 #include <SMAStorageBoy.h>
+#include <SMAStorageBoyMqtt.h>
 #include <MqttClient.h>
 #include <cassert>
 #include <chrono>
@@ -58,10 +59,13 @@ int main(int argc, char** argv){
 
 
     SMA::StorageBoy storageBoy("192.168.178.113", 502);
-    // SMA::Device sunnyBoy("192.168.178.128", 502);
-    SMA::DeviceMqtt sunnyBoy("sunnyBoy","192.168.178.128",&mqttClient,502);
-    sunnyBoy.topicPrefix = "testTopic";
-    sunnyBoy.sending(true);
+    SMA::StorageBoyMqtt storageBoyMqtt("storageBoy", &storageBoy, &mqttClient);
+    storageBoyMqtt.topicPrefix = "testTopic";
+    storageBoyMqtt.sending(true);
+    SMA::Device sunnyBoy("192.168.178.128", 502);
+    SMA::DeviceMqtt sunnyBoyMqtt("sunnyBoy", &sunnyBoy, &mqttClient);
+    sunnyBoyMqtt.topicPrefix = "testTopic";
+    sunnyBoyMqtt.sending(true);
 
 
     for(int i = 0; i <8 && run_test; ++i){

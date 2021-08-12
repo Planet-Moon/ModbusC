@@ -30,6 +30,7 @@ target_link_libraries(main PRIVATE hello)
 target_link_libraries(main PRIVATE SMADevice)
 target_link_libraries(main PRIVATE SMADeviceMqtt)
 target_link_libraries(main PRIVATE SMAStorageBoy)
+target_link_libraries(main PRIVATE SMAStorageBoyMqtt)
 target_link_libraries(main PRIVATE mqtt)
 
 add_subdirectory(TemplateTests)
