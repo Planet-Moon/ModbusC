@@ -30,9 +30,13 @@ namespace mb{
             void test_connection_wrapper();
 
         protected:
-            virtual void test_connection();
+            virtual bool test_connection();
             void start_thread();
             void stop_thread();
+
+            long test_counter{0};
+            long test_counter_success{0};
+            long test_counter_fail{0};
     };
 
     void test_modbus();

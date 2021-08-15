@@ -118,12 +118,26 @@ namespace mb{
             #ifdef DEBUG
                 std::cerr << "modbus connection " + ipAddress + ":" << port << " thread running"<< std::endl;
             #endif // DEBUG
-            test_connection();
+            try
+            {
+                test_counter++;
+                if(test_connection()){
+                    test_counter_success++;
+                }
+                else{
+                    test_counter_fail++;
+                }
+            }
+            catch(std::exception& e)
+            {
+                std::cout << e.what() << std::endl;
+                test_counter_fail++;
+            }
             std::this_thread::sleep_for(std::chrono::milliseconds(3000));
         }
     }
 
-    void Device::test_connection()
+    bool Device::test_connection()
     {
         if(connection != NULL){
             online = true;
@@ -131,5 +145,6 @@ namespace mb{
         else{
             online = false;
         }
+        return online;
     }
 }
