@@ -4,6 +4,7 @@
 #include <ModbusRegister.h>
 #include <SMADevice.h>
 #include <SMADeviceMqtt.h>
+#include <SMAMainsMqtt.h>
 #include <SMAStorageBoy.h>
 #include <SMAStorageBoyMqtt.h>
 #include <MqttClient.h>
@@ -51,33 +52,42 @@ int main(int argc, char** argv){
     assert(testDiff <= testRegister.factor);
 
     myMqtt::Client mqttClient("tcp://192.168.178.107:1883", "cpp_test_client");
-    // SMA::DeviceMqtt sunnyBoyMqtt("192.168.178.128", &mqttClient, 502);
-    // mqttClient.subscribe("testTopic1/#", 1);
-    // mqttClient.subscribe("testTopic2/#", 1);
-    // mqttClient.publish("testTopic1", "Hello world1!", 1);
-    // mqttClient.publish("testTopic2", "Hello world2!", 1);
-
 
     SMA::StorageBoy storageBoy("192.168.178.113", 502);
     SMA::StorageBoyMqtt storageBoyMqtt("storageBoy", &storageBoy, &mqttClient);
     storageBoyMqtt.topicPrefix = "testTopic";
     storageBoyMqtt.sending(true);
-    SMA::Device sunnyBoy("192.168.178.128", 502);
-    SMA::DeviceMqtt sunnyBoyMqtt("sunnyBoy", &sunnyBoy, &mqttClient);
-    sunnyBoyMqtt.topicPrefix = "testTopic";
-    sunnyBoyMqtt.sending(true);
+
+    SMA::Device sunnyBoy0("192.168.178.128", 502);
+    SMA::DeviceMqtt sunnyBoyMqtt0("sunnyBoy0", &sunnyBoy0, &mqttClient);
+    sunnyBoyMqtt0.topicPrefix = "testTopic";
+    sunnyBoyMqtt0.sending(true);
+
+    SMA::MainsMqtt mainsMqtt("mains", &sunnyBoy0, &mqttClient);
+    mainsMqtt.topicPrefix = "testTopic";
+    mainsMqtt.sending(true);
+
+    SMA::Device sunnyBoy1("192.168.178.142", 502);
+    SMA::DeviceMqtt sunnyBoyMqtt1("sunnyBoy1", &sunnyBoy1, &mqttClient);
+    sunnyBoyMqtt1.topicPrefix = "testTopic";
+    sunnyBoyMqtt1.sending(true);
+
+    SMA::Device sunnyBoy2("192.168.178.152", 502);
+    SMA::DeviceMqtt sunnyBoyMqtt2("sunnyBoy1", &sunnyBoy2, &mqttClient);
+    sunnyBoyMqtt2.topicPrefix = "testTopic";
+    sunnyBoyMqtt2.sending(true);
 
 
     for(int i = 0; i <8 && run_test; ++i){
         std::cout << i << "-------------------------" << std::endl;
-        std::cout << "->sunnyBoy" << std::endl;
-        sunnyBoy.testRead();
-        volatile int sunnyBoy_slaveId = modbus_get_slave(sunnyBoy.connection);
-        volatile int sunnyBoy_power = sunnyBoy.get_power();
-        volatile int sunnyBoy_dcWatt = sunnyBoy.get_dcWatt();
-        volatile int sunnyBoy_mainsFeedIn = sunnyBoy.get_mainsFeedIn();
-        volatile int sunnyBoy_mainsSupply = sunnyBoy.get_mainsSupply();
-        volatile bool sunnyBoy_online = sunnyBoy.online;
+        std::cout << "->sunnyBoy0" << std::endl;
+        sunnyBoy0.testRead();
+        volatile int sunnyBoy_slaveId = modbus_get_slave(sunnyBoy0.connection);
+        volatile int sunnyBoy_power = sunnyBoy0.get_power();
+        volatile int sunnyBoy_dcWatt = sunnyBoy0.get_dcWatt();
+        volatile int sunnyBoy_mainsFeedIn = sunnyBoy0.get_mainsFeedIn();
+        volatile int sunnyBoy_mainsSupply = sunnyBoy0.get_mainsSupply();
+        volatile bool sunnyBoy_online = sunnyBoy0.online;
 
         std::cout << "->storageBoy" << std::endl;
         storageBoy.testRead();
@@ -89,8 +99,8 @@ int main(int argc, char** argv){
         volatile unsigned int storageBoy_chargeCurrent = storageBoy.get_chargeCurrent();
         volatile unsigned int storageBoy_maxDischargeCurrent = storageBoy.get_maxDischargeCurrent();
         volatile unsigned int storageBoy_maxChargeCurrent = storageBoy.get_maxChargeCurrent();
-        volatile unsigned int storageBoy_mainsFeedIn = sunnyBoy.get_mainsFeedIn();
-        volatile unsigned int storageBoy_mainsSupply = sunnyBoy.get_mainsSupply();
+        volatile unsigned int storageBoy_mainsFeedIn = storageBoy.get_mainsFeedIn();
+        volatile unsigned int storageBoy_mainsSupply = storageBoy.get_mainsSupply();
         volatile bool storageBoy_online = storageBoy.online;
         std::this_thread::sleep_for(std::chrono::milliseconds(5000));
         std::cout << i << "+++---+++---+++---+++---" << std::endl;

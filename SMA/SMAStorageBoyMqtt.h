@@ -3,7 +3,7 @@
 #include <SMAMqttInterface.h>
 
 namespace SMA {
-    class StorageBoyMqtt: public MqttInterface
+    class StorageBoyMqtt: virtual public MqttInterface
     {
     public:
         StorageBoyMqtt(std::string name, StorageBoy* storageBoy, myMqtt::Client* client);

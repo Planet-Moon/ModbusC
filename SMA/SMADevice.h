@@ -42,6 +42,6 @@ namespace SMA
         mb::Register<int> mainsFeedIn;
         mb::Register<int> mainsSupply;
 
-        void test_connection() override;
+        virtual bool test_connection() override;
     };
 }

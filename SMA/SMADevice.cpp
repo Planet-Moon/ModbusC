@@ -5,14 +5,14 @@
 #include <ModbusRegister.h>
 
 #define INIT_DEVICE_REGISTERS \
-    deviceInfo(this->connection, 42109), \
-    serialNumber(this->connection, 30057), \
-    rebootRegister(this->connection, 40077), \
-    model(this->connection, 30057), \
-	power(this->connection,30775,1," W"), \
-	dcWatt(this->connection,30773,1," W"), \
-    mainsFeedIn(this->connection, 30867, 1, " W"), \
-    mainsSupply(this->connection, 30865, 1, " W")
+    deviceInfo(connection, 42109), \
+    serialNumber(connection, 30057), \
+    rebootRegister(connection, 40077), \
+    model(connection, 30057), \
+	power(connection,30775,1," W"), \
+	dcWatt(connection,30773,1," W"), \
+    mainsFeedIn(connection, 30867, 1, " W"), \
+    mainsSupply(connection, 30865, 1, " W")
 
 #define GENERATE_MB_GET_FUNC(type, mbRegister) \
     type Device::get_##mbRegister(bool* ret){ \
@@ -68,7 +68,7 @@ namespace SMA{
     void Device::parseDeviceInfo()
     {
         std::runtime_error connection_exception("SMADevice "+ipAddress+":"+std::to_string(port)+ " not reachable");
-        if(modbus_set_slave(this->connection, 1) != 0){
+        if(modbus_set_slave(connection, 1) != 0){
             throw connection_exception;
         }
         bool valid{false};
@@ -79,7 +79,7 @@ namespace SMA{
         slaveId_ = return_value[3];
         pysicalSusyId_ = static_cast<unsigned short>(return_value[2]);
         pysicalSerialNumber_ = static_cast<unsigned int>(MODBUS_GET_INT32_FROM_INT16(return_value.data(), 0));
-        if(modbus_set_slave(this->connection, slaveId_) != 0){
+        if(modbus_set_slave(connection, slaveId_) != 0){
             throw connection_exception;
         }
     }
@@ -113,7 +113,7 @@ namespace SMA{
 
     void Device::reboot(){
         if(online){
-            mb::Register<int> reboot(this->connection,40077);
+            mb::Register<int> reboot(connection,40077);
             reboot.setValue(1146);
             online = false;
             stop_thread();
@@ -140,18 +140,28 @@ namespace SMA{
         return;
     }
 
-    void Device::test_connection()
+    bool Device::test_connection()
     {
+        bool test = false;
         unsigned int model_temp = static_cast<unsigned int>(
             MODBUS_GET_INT32_FROM_INT16(
-                model.readRawData().data(),
+                model.readRawData(&test).data(),
                 0
             )
         );
-        online = model_temp == model_;
-        if(!online){
+        int slave_id = modbus_get_slave(connection);
+        if((model_temp == model_) && !test){
+            std::cout<<"SMADevice "+ipAddress+":"+std::to_string(port)+" Model correct, but modbus read failed"<<std::endl;
+        }
+        online = (model_temp == model_) && test;
+
+        if(online){
+            ;
+        }
+        else{
             throw std::runtime_error("SMADevice "+ipAddress+":"+std::to_string(port)+ " not reachable");
         }
+        return online;
     }
 
     void Device::testRead(bool* ret /* = nullptr */)

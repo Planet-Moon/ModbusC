@@ -37,6 +37,14 @@ target_link_libraries(SMADeviceMqtt PUBLIC SMADevice)
 target_link_libraries(SMADeviceMqtt PUBLIC SMAMqttInterface)
 
 add_library(
+    SMAMainsMqtt
+    SMAMainsMqtt.h
+    SMAMainsMqtt.cpp
+)
+target_link_libraries(SMAMainsMqtt PUBLIC SMADevice)
+target_link_libraries(SMAMainsMqtt PUBLIC SMAMqttInterface)
+
+add_library(
     SMAStorageBoyMqtt
     SMAStorageBoyMqtt.h
     SMAStorageBoyMqtt.cpp
