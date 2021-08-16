@@ -11,7 +11,7 @@ namespace mb{
     template<class T>
     class Register{
         public:
-            Register(modbus_t* device_, int addr_, float factor_ = 1., std::string unit_ = "") :
+            Register(Device* device_, int addr_, float factor_ = 1., std::string unit_ = "") :
                 device(device_),
                 addr(addr_),
                 factor(factor_),
@@ -28,11 +28,13 @@ namespace mb{
         private:
             std::vector<uint16_t> data;
             unsigned short dataSize;
-            modbus_t* device;
+            Device* device;
 
         public:
             std::vector<uint16_t> readRawData(bool* ret = nullptr) {
-                int status = modbus_read_registers(device, addr, dataSize, data.data());
+                device->modbus_mtx.lock();
+                int status = modbus_read_registers(device->connection, addr, dataSize, data.data());
+                device->modbus_mtx.unlock();
                 if (ret) {
                     *ret = status == dataSize;
                 }
@@ -40,7 +42,9 @@ namespace mb{
             }
 
             void writeRawData(const std::vector<uint16_t>* input, bool* ret = nullptr) {
-                int status = modbus_write_registers(device, addr, dataSize, input->data());
+                device->modbus_mtx.lock();
+                int status = modbus_write_registers(device->connection, addr, dataSize, input->data());
+                device->modbus_mtx.unlock();
                 if (ret) {
                     *ret = status == dataSize;
                 }

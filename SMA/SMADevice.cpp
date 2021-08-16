@@ -5,14 +5,14 @@
 #include <ModbusRegister.h>
 
 #define INIT_DEVICE_REGISTERS \
-    deviceInfo(connection, 42109), \
-    serialNumber(connection, 30057), \
-    rebootRegister(connection, 40077), \
-    model(connection, 30057), \
-	power(connection,30775,1," W"), \
-	dcWatt(connection,30773,1," W"), \
-    mainsFeedIn(connection, 30867, 1, " W"), \
-    mainsSupply(connection, 30865, 1, " W")
+    deviceInfo(this, 42109), \
+    serialNumber(this, 30057), \
+    rebootRegister(this, 40077), \
+    model(this, 30057), \
+	power(this,30775,1," W"), \
+	dcWatt(this,30773,1," W"), \
+    mainsFeedIn(this, 30867, 1, " W"), \
+    mainsSupply(this, 30865, 1, " W")
 
 #define GENERATE_MB_GET_FUNC(type, mbRegister) \
     type Device::get_##mbRegister(bool* ret){ \
@@ -113,7 +113,7 @@ namespace SMA{
 
     void Device::reboot(){
         if(online){
-            mb::Register<int> reboot(connection,40077);
+            mb::Register<int> reboot(this,40077);
             reboot.setValue(1146);
             online = false;
             stop_thread();

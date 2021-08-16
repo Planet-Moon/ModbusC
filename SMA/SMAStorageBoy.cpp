@@ -2,11 +2,11 @@
 #include <iostream>
 
 #define INIT_STORAGEBOY_REGISTERS \
-	soc(this->connection,30845,1," %"), \
-	chargeCurrent(this->connection,31393,1," W"), \
-	dischargeCurrent(this->connection,31395,1," W"), \
-	maxChargeCurrent(this->connection,40189,1," W"), \
-	maxDischargeCurrent(this->connection,40191,1," W")
+	soc(this,30845,1," %"), \
+	chargeCurrent(this,31393,1," W"), \
+	dischargeCurrent(this,31395,1," W"), \
+	maxChargeCurrent(this,40189,1," W"), \
+	maxDischargeCurrent(this,40191,1," W")
 
 #define GENERATE_MB_GET_FUNC(type, mbRegister) \
     type StorageBoy::get_##mbRegister(bool* ret){ \

@@ -3,8 +3,9 @@
 #include <string>
 #include <map>
 #include <vector>
-
 #include <thread>
+#include <mutex>
+
 
 namespace mb{
 
@@ -19,8 +20,11 @@ namespace mb{
             Device(std::string ipAddress, int port = 502);
             ~Device();
             modbus_t* connection;
+            std::mutex modbus_mtx;
             bool connect(const char* ipAddress, int port = 502);
             bool disconnect();
+            virtual void print_counters() final;
+
         private:
             void test_class();
             void test_all_registers();
@@ -37,6 +41,7 @@ namespace mb{
             long test_counter{0};
             long test_counter_success{0};
             long test_counter_fail{0};
+            std::string test_history{""};
     };
 
     void test_modbus();

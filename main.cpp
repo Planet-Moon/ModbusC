@@ -35,13 +35,13 @@ int main(int argc, char** argv){
 
     bool ret_val = false;
 
-    mb::Register<short> waterTankTop(heatingControl.connection, 2, 0.1, "°C");
+    mb::Register<short> waterTankTop(&heatingControl, 2, 0.1, "°C");
     std::cout << "waterTankTop: " + mb::printVector(waterTankTop.readRawData(&ret_val)) + ", status: " << ret_val << std::endl;
 
-    mb::Register<short> waterTankMiddle(heatingControl.connection, 5, 0.1, "°C");
+    mb::Register<short> waterTankMiddle(&heatingControl, 5, 0.1, "°C");
     std::cout << "waterTankMiddle: " + mb::printVector(waterTankMiddle.readRawData(&ret_val)) + ", status: " << ret_val << std::endl;
 
-    mb::Register<float> testRegister(heatingControl.connection, 45, 0.1, "°C");
+    mb::Register<float> testRegister(&heatingControl, 45, 0.1, "°C");
     std::cout << "testRegister: " << testRegister.getValue(&ret_val) << ", status: "<< ret_val << std::endl;
 
     testRegister.setValue(float(753));
@@ -105,6 +105,14 @@ int main(int argc, char** argv){
         std::this_thread::sleep_for(std::chrono::milliseconds(5000));
         std::cout << i << "+++---+++---+++---+++---" << std::endl;
     }
+    std::cout<<"storageBoy:"<<std::endl;
+    storageBoy.print_counters();
+    std::cout<<"sunnyBoy0:"<<std::endl;
+    sunnyBoy0.print_counters();
+    std::cout<<"sunnyBoy1:"<<std::endl;
+    sunnyBoy1.print_counters();
+    std::cout<<"sunnyBoy2:"<<std::endl;
+    sunnyBoy2.print_counters();
 
     return 0;
 }

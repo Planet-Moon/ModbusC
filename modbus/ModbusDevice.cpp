@@ -121,17 +121,21 @@ namespace mb{
             try
             {
                 test_counter++;
+                test_history += "|";
                 if(test_connection()){
                     test_counter_success++;
+                    test_history += "+";
                 }
                 else{
                     test_counter_fail++;
+                    test_history += "-";
                 }
             }
             catch(std::exception& e)
             {
                 std::cout << e.what() << std::endl;
                 test_counter_fail++;
+                test_history += "e";
             }
             std::this_thread::sleep_for(std::chrono::milliseconds(3000));
         }
@@ -146,5 +150,13 @@ namespace mb{
             online = false;
         }
         return online;
+    }
+
+    void Device::print_counters()
+    {
+        std::cout << "total: "<<test_counter<<\
+            ", success: "<<test_counter_success<<\
+            ", failure: "<<test_counter_fail<<std::endl;
+        std::cout<<"history: "<<test_history<<std::endl;
     }
 }
