@@ -40,7 +40,7 @@ void test(int* a, int* b = nullptr)
 int test_prototype(){
     int test1 = 1;
     int test2 = 3;
-    std::thread* test_thread = new std::thread(test, &test1, &test2);
+    std::unique_ptr<std::thread> test_thread = std::make_unique<std::thread>(test, &test1, &test2);
     test_thread->join();
     std::cout<<test2<<std::endl;
     return 0;
@@ -50,15 +50,15 @@ int test_prototype(){
 int main(int argc, char* argv[])
 {
     int nThreads = 45;
-    std::map<std::string, std::thread*> threadMap;
+    std::map<std::string, std::unique_ptr<std::thread>> threadMap;
     std::vector<unsigned int> result;
     result.reserve(nThreads);
 
     for(int i = 0; i < nThreads; ++i)
     {
         result.push_back(0);
-        std::thread* t = new std::thread(fibonacci, i, &result.at(i));
-        threadMap["thread_"+std::to_string(i)] = t;
+        std::unique_ptr<std::thread> t = std::make_unique<std::thread>(fibonacci, i, &result.at(i));
+        threadMap["thread_"+std::to_string(i)] = std::move(t);
         std::cout<<"thread_"+std::to_string(i)+" started"<<std::endl;
     }
     std::cout << "all threads running" << std::endl;
