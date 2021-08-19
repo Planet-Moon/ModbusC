@@ -56,13 +56,15 @@ namespace myMqtt{
     public:
         subTopic(action_listener* callbackHandler, int qos = 1);
         subTopic();
+        ~subTopic() = default;
         int qos = 1;
         action_listener* callbackHandler;
     };
 
     class Client{
     public:
-        Client(const std::string& serverURI, const std::string& clientURI);
+        explicit Client(const std::string& serverURI, const std::string& clientURI);
+        explicit Client(const Client& other) = delete;
         ~Client();
         void connect(const std::string& serverURI, const std::string& clientURI, mqtt::connect_options connOpts);
         void disconnect();
@@ -79,7 +81,7 @@ namespace myMqtt{
         int qos = 1;
 
     private:
-        mqtt::async_client* client_ = nullptr;
+        std::unique_ptr<mqtt::async_client> client_ = nullptr;
         callback* cb;
         const std::chrono::seconds TIMEOUT = std::chrono::seconds(10);
         std::map<std::string, int> subscribed_topics;

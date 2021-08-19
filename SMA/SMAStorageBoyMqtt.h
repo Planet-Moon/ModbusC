@@ -6,8 +6,10 @@ namespace SMA {
     class StorageBoyMqtt: virtual public MqttInterface
     {
     public:
-        StorageBoyMqtt(std::string name, StorageBoy* storageBoy, myMqtt::Client* client);
-        StorageBoy* storageBoy;
+        explicit StorageBoyMqtt(std::string name, std::shared_ptr<StorageBoy> storageBoy, std::shared_ptr<myMqtt::Client> client);
+        StorageBoyMqtt(const StorageBoyMqtt& other) = delete;
+        ~StorageBoyMqtt() = default;
+        std::shared_ptr<StorageBoy> storageBoy;
         void storageboy_thread_task();
         void device_thread_task();
         void thread_task() override;

@@ -2,11 +2,13 @@
 #include "SMADevice.h"
 
 namespace SMA {
-	class StorageBoy : virtual public Device
+	class StorageBoy : virtual public Device, private std::enable_shared_from_this<StorageBoy>
 	{
 		public:
-			StorageBoy(const char* ipAddress, int port = 502);
-			StorageBoy(std::string ipAddress, int port = 502);
+			explicit StorageBoy(const char* ipAddress, int port = 502);
+			explicit StorageBoy(std::string ipAddress, int port = 502);
+			StorageBoy(const StorageBoy& other) = delete;
+			~StorageBoy() = default;
 
 		private:
 			void storageBoyInit();

@@ -15,7 +15,7 @@ namespace mb{
     void Device::start_thread(){
         if(test_connection_run == false){
             test_connection_run = true;
-            check_online_thread = new std::thread(&Device::test_connection_wrapper, this);
+            check_online_thread = std::make_unique<std::thread>(&Device::test_connection_wrapper, this);
             #ifdef DEBUG
                 std::cerr << "modbus connection " + ipAddress + ":" << port << " thread started" << std::endl;
             #endif // DEBUG

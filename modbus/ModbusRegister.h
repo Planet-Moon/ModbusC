@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <ModbusDevice.h>
+#include <cassert>
 
 namespace mb{
 
@@ -21,6 +22,8 @@ namespace mb{
                 dataSize = data.size();
                 return;
             }
+            Register(const Register& other) = delete;
+            ~Register() = default;
             int addr;
             float factor;
             std::string unit;
@@ -32,6 +35,7 @@ namespace mb{
 
         public:
             std::vector<uint16_t> readRawData(bool* ret = nullptr) {
+                assert(device != nullptr);
                 device->modbus_mtx.lock();
                 int status = modbus_read_registers(device->connection, addr, dataSize, data.data());
                 device->modbus_mtx.unlock();
@@ -42,6 +46,7 @@ namespace mb{
             }
 
             void writeRawData(const std::vector<uint16_t>* input, bool* ret = nullptr) {
+                assert(device != nullptr);
                 device->modbus_mtx.lock();
                 int status = modbus_write_registers(device->connection, addr, dataSize, input->data());
                 device->modbus_mtx.unlock();

@@ -2,11 +2,11 @@
 
 
 namespace SMA{
-    MqttInterface::MqttInterface(std::string name_, myMqtt::Client* client_):
+    MqttInterface::MqttInterface(std::string name_,  std::shared_ptr<myMqtt::Client> client_):
         name(name_),
         client(client_)
     {
-        thread = new std::thread(&MqttInterface::thread_task, this);
+        thread = std::make_unique<std::thread>(&MqttInterface::thread_task, this);
     }
     MqttInterface::~MqttInterface()
     {

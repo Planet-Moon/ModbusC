@@ -9,8 +9,8 @@
     serialNumber(this, 30057), \
     rebootRegister(this, 40077), \
     model(this, 30057), \
-	power(this,30775,1," W"), \
-	dcWatt(this,30773,1," W"), \
+	power(this, 30775, 1, " W"), \
+	dcWatt(this, 30773, 1, " W"), \
     mainsFeedIn(this, 30867, 1, " W"), \
     mainsSupply(this, 30865, 1, " W")
 

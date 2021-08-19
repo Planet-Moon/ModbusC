@@ -113,11 +113,11 @@ namespace myMqtt {
 
     void Client::connect(const std::string& serverURI_, const std::string& clientURI_, mqtt::connect_options connOpts)
     {
-        if(client_ != nullptr)
-            delete client_;
+        if(client_)
+            client_.reset();
         serverURI = serverURI_;
         clientURI = clientURI_;
-        client_ = new mqtt::async_client(serverURI, clientURI);
+        client_ = std::make_unique<mqtt::async_client>(serverURI, clientURI);
         cb = new callback(this);
         client_->set_callback(*cb);
         mqtt::token_ptr conntok = client_->connect(connOpts);
@@ -190,6 +190,6 @@ namespace myMqtt {
     Client::~Client()
     {
         disconnect();
-        delete client_;
+        client_.reset();
     }
 }

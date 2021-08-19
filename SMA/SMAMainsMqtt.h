@@ -8,8 +8,10 @@ namespace SMA {
     class MainsMqtt: virtual public MqttInterface
     {
     public:
-        MainsMqtt(std::string name, Device* device, myMqtt::Client* client);
-        Device* device;
+        explicit MainsMqtt(std::string name, std::shared_ptr<Device> device, std::shared_ptr<myMqtt::Client>  client);
+        MainsMqtt(const MainsMqtt& other) = delete;
+        ~MainsMqtt() = default;
+        std::shared_ptr<Device> device;
         void device_thread_task();
         void thread_task() override;
 

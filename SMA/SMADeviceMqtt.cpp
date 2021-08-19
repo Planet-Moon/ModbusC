@@ -3,7 +3,7 @@
 #include <cassert>
 
 namespace SMA{
-    DeviceMqtt::DeviceMqtt(std::string name_, Device* device_, myMqtt::Client* client_):
+    DeviceMqtt::DeviceMqtt(std::string name_, std::shared_ptr<Device> device_, std::shared_ptr<myMqtt::Client> client_):
         device(device_),
         MqttInterface(name_, client_)
     {

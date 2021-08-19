@@ -8,8 +8,10 @@ namespace SMA
     {
         // function
     public:
-        Device(const char *ipAddress, int port = 502);
-        Device(std::string ipAddress, int port = 502);
+        explicit Device(const char *ipAddress, int port = 502);
+        explicit Device(std::string ipAddress, int port = 502);
+        Device(const Device &other) = delete;
+        ~Device() = default;
         void reboot();
         void test();
 

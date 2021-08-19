@@ -6,10 +6,11 @@ namespace SMA{
     class MqttInterface
     {
     public:
-        MqttInterface(std::string name, myMqtt::Client* client);
+        explicit MqttInterface(std::string name, std::shared_ptr<myMqtt::Client> client);
+        MqttInterface(const MqttInterface& other) = delete;
         ~MqttInterface();
-        myMqtt::Client* client;
-        std::thread* thread;
+        std::shared_ptr<myMqtt::Client> client;
+        std::unique_ptr<std::thread> thread;
         std::chrono::seconds period_time{2};
         std::string name{""};
         std::string topicPrefix{""};

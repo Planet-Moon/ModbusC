@@ -4,7 +4,7 @@
 
 
 namespace SMA {
-    StorageBoyMqtt::StorageBoyMqtt(std::string name_, StorageBoy* storageBoy_, myMqtt::Client* client_):
+    StorageBoyMqtt::StorageBoyMqtt(std::string name_, std::shared_ptr<StorageBoy> storageBoy_, std::shared_ptr<myMqtt::Client> client_):
         storageBoy(storageBoy_),
         MqttInterface(name_, client_)
     {
