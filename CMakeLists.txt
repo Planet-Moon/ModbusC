@@ -25,6 +25,8 @@ add_subdirectory(SMA)
 
 add_subdirectory(Mqtt)
 
+add_subdirectory(ObserverModel)
+
 add_executable(main main.cpp)
 target_link_libraries(main PRIVATE hello)
 target_link_libraries(main PRIVATE SMADevice)
