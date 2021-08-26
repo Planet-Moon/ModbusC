@@ -2,17 +2,17 @@
 #include <iostream>
 
 #define INIT_STORAGEBOY_REGISTERS \
-	soc(this,30845,1," %"), \
-	chargeCurrent(this,31393,1," W"), \
-	dischargeCurrent(this,31395,1," W"), \
-	maxChargeCurrent(this,40189,1," W"), \
-	maxDischargeCurrent(this,40191,1," W")
+	mbReg_soc(this,30845,1," %"), \
+	mbReg_chargeCurrent(this,31393,1," W"), \
+	mbReg_dischargeCurrent(this,31395,1," W"), \
+	mbReg_maxChargeCurrent(this,40189,1," W"), \
+	mbReg_maxDischargeCurrent(this,40191,1," W")
 
 #define GENERATE_MB_GET_FUNC(type, mbRegister) \
     type StorageBoy::get_##mbRegister(bool* ret){ \
         type retval = 0; \
 		if(online){ \
-			retval = ##mbRegister.getValue(ret); \
+			retval = mbReg_##mbRegister.getValue(ret); \
 		} \
         return (retval); \
     }
@@ -20,7 +20,7 @@
 #define GENERATE_MB_SET_FUNC(type, mbRegister) \
     void StorageBoy::set_##mbRegister(type input, bool* ret){ \
 		if(online){ \
-        	##mbRegister.setValue(input, ret); \
+        	mbReg_##mbRegister.setValue(input, ret); \
 		} \
     }
 
@@ -29,16 +29,37 @@ namespace SMA {
 		Device(ipAddress,port),
 		INIT_STORAGEBOY_REGISTERS
 	{
+		storageBoyInit();
 	}
 
 	StorageBoy::StorageBoy(std::string ipAddress, int port):
 		Device(ipAddress, port),
 		INIT_STORAGEBOY_REGISTERS
 	{
+		storageBoyInit();
 	}
+
+	bool StorageBoy::storageBoy_read_all_registers()
+	{
+		bool result = true;
+		soc = get_soc(&result);
+		dischargeCurrent = get_dischargeCurrent(&result);
+		chargeCurrent = get_chargeCurrent(&result);
+		return result;
+	}
+
+	bool StorageBoy::read_all_registers()
+	{
+		bool result = true;
+		result = result && device_read_all_registers();
+		result = result && storageBoy_read_all_registers();
+		return result;
+	};
 
 	void StorageBoy::storageBoyInit()
 	{
+		maxDischargeCurrent = get_maxDischargeCurrent();
+		maxChargeCurrent = get_maxChargeCurrent();
 	}
 
 	GENERATE_MB_GET_FUNC(unsigned int, soc);

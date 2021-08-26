@@ -10,9 +10,9 @@ namespace SMA {
         StorageBoyMqtt(const StorageBoyMqtt& other) = delete;
         ~StorageBoyMqtt() = default;
         std::shared_ptr<StorageBoy> storageBoy;
-        void storageboy_thread_task();
-        void device_thread_task();
-        void thread_task() override;
+        void storageboy_update();
+        void device_update();
+        void update() override;
 
     public:
         int _power;

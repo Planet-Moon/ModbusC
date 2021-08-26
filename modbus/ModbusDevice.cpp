@@ -6,16 +6,19 @@
 
 namespace mb{
 
-    void Device::init(const char* ipAddress_, int port_){
+    void Device::init(const char* ipAddress_, int port_)
+    {
         ipAddress = ipAddress_;
         port = port_;
         connect(ipAddress.c_str(), port);
+        start_thread();
     }
 
-    void Device::start_thread(){
-        if(test_connection_run == false){
-            test_connection_run = true;
-            check_online_thread = std::make_unique<std::thread>(&Device::test_connection_wrapper, this);
+    void Device::start_thread()
+    {
+        if(read_values_run == false){
+            read_values_run = true;
+            read_values_thread = std::make_unique<std::thread>(&Device::read_values_task, this);
             #ifdef DEBUG
                 std::cerr << "modbus connection " + ipAddress + ":" << port << " thread started" << std::endl;
             #endif // DEBUG
@@ -30,7 +33,8 @@ namespace mb{
         init(ipAddress_.c_str(), port_);
     }
 
-    Device::~Device(){
+    Device::~Device()
+    {
         stop_thread();
         disconnect();
         #ifdef DEBUG
@@ -38,19 +42,21 @@ namespace mb{
         #endif // DEBUG
     }
 
-    void Device::stop_thread(){
-        if(test_connection_run){
-            std::thread::id thread_id = check_online_thread->get_id();
-            if(check_online_thread->joinable())
-                test_connection_run = false;
-                check_online_thread->join();
+    void Device::stop_thread()
+    {
+        if(read_values_run){
+            std::thread::id thread_id = read_values_thread->get_id();
+            if(read_values_thread->joinable())
+                read_values_run = false;
+                read_values_thread->join();
             #ifdef DEBUG
                 std::cerr << "modbus connection " + ipAddress + ":" << port << " thread stopped"<< std::endl;
             #endif // DEBUG
         }
     }
 
-    bool Device::connect(const char* ipAddress_, int port_){
+    bool Device::connect(const char* ipAddress_, int port_)
+    {
         connection = modbus_new_tcp(ipAddress_,port_);
         if (modbus_connect(connection) == -1)
         {
@@ -59,23 +65,22 @@ namespace mb{
             #endif // DEBUG
             modbus_free(connection);
             connection = nullptr;
-            online = false;
+            return false;
         }
         else
         {
             #ifdef DEBUG
                 std::cerr << "modbus successfully connected to ip " + ipAddress + ":" << port_ << std::endl;
             #endif // DEBUG
-            online = true;
+            return true;
         }
-        return online;
     }
 
-    bool Device::disconnect(){
+    bool Device::disconnect()
+    {
         modbus_close(connection);
         modbus_free(connection);
         connection = nullptr;
-        online = false;
         #ifdef DEBUG
             std::cerr << "modbus connection " + ipAddress + ":" << port << " disconnected"<< std::endl;
         #endif // DEBUG
@@ -91,13 +96,15 @@ namespace mb{
         // }
     }
 
-    void Device::test_all_registers(){
+    void Device::test_all_registers()
+    {
         // for(auto& x: registers){
         //     auto registerValue = x.second.readRawData(connection);
         // }
     }
 
-    void test_modbus(){
+    void test_modbus()
+    {
         modbus_t *mb;
         uint16_t tab_reg[32] = {0};
         mb = modbus_new_tcp("192.168.178.107",502);
@@ -110,46 +117,61 @@ namespace mb{
         }
     }
 
-    void Device::test_connection_wrapper(){
+    bool Device::read_all_registers()
+    {
+        return true;
+    }
+
+    void Device::read_values_task()
+    {
         #ifdef DEBUG
             std::cerr << "modbus connection " + ipAddress + ":" << port << " thread started"<< std::endl;
         #endif // DEBUG
-        while(test_connection_run){
+        while(read_values_run){
             #ifdef DEBUG
                 std::cerr << "modbus connection " + ipAddress + ":" << port << " thread running"<< std::endl;
             #endif // DEBUG
             try
             {
-                test_counter++;
-                test_history += "|";
-                if(test_connection()){
-                    test_counter_success++;
-                    test_history += "+";
+                bool connection_state = read_all_registers();
+                if(connection_state){
+                    update_connections_stats('1');
+                    notify();
                 }
                 else{
-                    test_counter_fail++;
-                    test_history += "-";
+                    update_connections_stats('0');
                 }
             }
             catch(std::exception& e)
             {
                 std::cout << e.what() << std::endl;
-                test_counter_fail++;
-                test_history += "e";
+                update_connections_stats('e');
             }
-            std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000*read_values_period));
         }
     }
 
-    bool Device::test_connection()
+    void Device::update_connections_stats(char connection_state)
     {
-        if(connection != NULL){
-            online = true;
+        test_counter++;
+        test_history += "|";
+        switch(connection_state){
+            case '1':
+                online = true;
+                test_counter_success++;
+                test_history += "+";
+                break;
+            case '0':
+                online = false;
+                test_counter_fail++;
+                test_history += "-";
+                break;
+            case 'e':
+                online = false;
+                test_counter_fail++;
+                test_history += "e";
+                break;
         }
-        else{
-            online = false;
-        }
-        return online;
     }
 
     void Device::print_counters()

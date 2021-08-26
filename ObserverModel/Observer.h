@@ -4,10 +4,10 @@
 
 class Observer {
     public:
-        Observer(const std::string& name);
+        explicit Observer(const std::string& name);
         Observer(const Observer&) = delete;
         ~Observer() = default;
         virtual void update(const std::string& message_from_subject);
         virtual void update();
-        std::string name;
+        std::string observer_name;
 };

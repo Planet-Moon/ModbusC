@@ -24,4 +24,5 @@ target_include_directories(ModbusDevice PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 find_package(libmodbus CONFIG REQUIRED)
 target_link_libraries(ModbusDevice PUBLIC modbus)
 target_link_libraries(ModbusDevice PUBLIC ModbusConversions)
+target_link_libraries(ModbusDevice PUBLIC ObserverModel)
 

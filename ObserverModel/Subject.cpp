@@ -40,7 +40,7 @@ std::list<std::string> Subject::observerNames()
     for(auto it=observers.begin(); it!=observers.end(); ++it)
     {
         auto observer = it->lock();
-        result.push_back(observer->name);
+        result.push_back(observer->observer_name);
     }
     return result;
 }

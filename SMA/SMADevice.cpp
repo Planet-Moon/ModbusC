@@ -5,20 +5,20 @@
 #include <ModbusRegister.h>
 
 #define INIT_DEVICE_REGISTERS \
-    deviceInfo(this, 42109), \
-    serialNumber(this, 30057), \
-    rebootRegister(this, 40077), \
-    model(this, 30057), \
-	power(this, 30775, 1, " W"), \
-	dcWatt(this, 30773, 1, " W"), \
-    mainsFeedIn(this, 30867, 1, " W"), \
-    mainsSupply(this, 30865, 1, " W")
+    mbReg_deviceInfo(this, 42109), \
+    mbReg_serialNumber(this, 30057), \
+    mbReg_rebootRegister(this, 40077), \
+    mbReg_model(this, 30057), \
+	mbReg_power(this, 30775, 1, " W"), \
+	mbReg_dcWatt(this, 30773, 1, " W"), \
+    mbReg_mainsFeedIn(this, 30867, 1, " W"), \
+    mbReg_mainsSupply(this, 30865, 1, " W")
 
 #define GENERATE_MB_GET_FUNC(type, mbRegister) \
     type Device::get_##mbRegister(bool* ret){ \
         type retval = 0; \
         if(online){ \
-            retval = ##mbRegister.getValue(ret); \
+            retval = mbReg_##mbRegister.getValue(ret); \
         } \
         return (retval); \
     }
@@ -26,7 +26,7 @@
 #define GENERATE_MB_SET_FUNC(type, mbRegister) \
     void Device::set_##mbRegister(type input, bool* ret){ \
         if(online){ \
-            ##mbRegister.setValue(input, ret); \
+            mbReg_##mbRegister.setValue(input, ret); \
         } \
     }
 
@@ -54,8 +54,8 @@ namespace SMA{
             parseDeviceInfo();
             online = true;
             bool test{false};
-            serialNumber_ = static_cast<unsigned int>(MODBUS_GET_INT32_FROM_INT16(serialNumber.readRawData(&test).data(), 0));
-            model_ = static_cast<unsigned int>(MODBUS_GET_INT32_FROM_INT16(model.readRawData(&test).data(), 0));
+            serialNumber_ = static_cast<unsigned int>(MODBUS_GET_INT32_FROM_INT16(mbReg_serialNumber.readRawData(&test).data(), 0));
+            model_ = static_cast<unsigned int>(MODBUS_GET_INT32_FROM_INT16(mbReg_model.readRawData(&test).data(), 0));
             start_thread();
         }
         catch (std::exception& e){
@@ -72,7 +72,7 @@ namespace SMA{
             throw connection_exception;
         }
         bool valid{false};
-        std::vector<uint16_t> return_value = deviceInfo.readRawData(&valid);
+        std::vector<uint16_t> return_value = mbReg_deviceInfo.readRawData(&valid);
         if(!valid){
             throw connection_exception;
         }
@@ -88,7 +88,7 @@ namespace SMA{
 	{
 		int temp = 0;
 		if(online){
-			temp = power.getValue(ret);
+			temp = mbReg_power.getValue(ret);
 		}
 		if(temp < 0){
 			temp = 0;
@@ -100,7 +100,7 @@ namespace SMA{
 	{
 		int temp = 0;
 		if(online){
-			temp = dcWatt.getValue(ret);
+			temp = mbReg_dcWatt.getValue(ret);
 		}
 		if(temp < 0)
 			temp = 0;
@@ -131,7 +131,7 @@ namespace SMA{
         bool ret_val = false;
         std::cout << "Test output" << std::endl;
         if(online){
-            model_ = static_cast<unsigned int>(MODBUS_GET_INT32_FROM_INT16(model.readRawData(&ret_val).data(),0));
+            model_ = static_cast<unsigned int>(MODBUS_GET_INT32_FROM_INT16(mbReg_model.readRawData(&ret_val).data(),0));
             std::cout << "Model: " << model_ << ", valid: "<< ret_val << std::endl;
         }
         else{
@@ -140,28 +140,21 @@ namespace SMA{
         return;
     }
 
-    bool Device::test_connection()
+    bool Device::device_read_all_registers()
     {
-        bool test = false;
-        unsigned int model_temp = static_cast<unsigned int>(
-            MODBUS_GET_INT32_FROM_INT16(
-                model.readRawData(&test).data(),
-                0
-            )
-        );
-        int slave_id = modbus_get_slave(connection);
-        if((model_temp == model_) && !test){
-            std::cout<<"SMADevice "+ipAddress+":"+std::to_string(port)+" Model correct, but modbus read failed"<<std::endl;
-        }
-        online = (model_temp == model_) && test;
+        bool result = true;
+        power = get_power(&result);
+        dcWatt = get_dcWatt(&result);
+        mainsFeedIn = get_mainsFeedIn(&result);
+        mainsSupply = get_mainsSupply(&result);
+        return result;
+    }
 
-        if(online){
-            ;
-        }
-        else{
-            throw std::runtime_error("SMADevice "+ipAddress+":"+std::to_string(port)+ " not reachable");
-        }
-        return online;
+    bool Device::read_all_registers()
+    {
+        bool result = true;
+        result = result && device_read_all_registers();
+        return result;
     }
 
     void Device::testRead(bool* ret /* = nullptr */)

@@ -50,7 +50,7 @@ void test_update()
             ObserverNameOnUpdate(std::string name): Observer(name) {}
             ~ObserverNameOnUpdate() = default;
             virtual void update() override {
-                std::cout<<name<<" update called"<<std::endl;
+                std::cout<<observer_name<<" update called"<<std::endl;
             }
     };
 

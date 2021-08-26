@@ -12,8 +12,8 @@ namespace SMA {
         MainsMqtt(const MainsMqtt& other) = delete;
         ~MainsMqtt() = default;
         std::shared_ptr<Device> device;
-        void device_thread_task();
-        void thread_task() override;
+        void mains_update();
+        void update() override;
 
     public:
         int _mainsFeedIn;

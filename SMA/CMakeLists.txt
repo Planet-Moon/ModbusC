@@ -27,6 +27,7 @@ add_library(
     SMAMqttInterface.cpp
 )
 target_link_libraries(SMAMqttInterface PUBLIC mqtt)
+target_link_libraries(SMAMqttInterface PUBLIC ObserverModel)
 
 add_library(
     SMADeviceMqtt

@@ -12,6 +12,7 @@ add_library(ObserverModel
     Subject.h
     Subject.cpp
 )
+target_include_directories(ObserverModel PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(TestObserver TestObserver.cpp)
 target_link_libraries(TestObserver ObserverModel)

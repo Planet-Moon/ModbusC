@@ -7,10 +7,9 @@ namespace SMA{
         device(device_),
         MqttInterface(name_, client_)
     {
-
     }
 
-    void DeviceMqtt::device_thread_task()
+    void DeviceMqtt::device_update()
     {
         if(_send_mqtt){
             std::string base_topic = "";
@@ -20,8 +19,8 @@ namespace SMA{
             base_topic += name+"/";
 
             bool ret = false;
-            _power = device->get_power(&ret);
-            _dcWatt = device->get_dcWatt(&ret);
+            _power = device->power;
+            _dcWatt = device->dcWatt;
 
             if(ret){
                 if(abs(_power-_power_old)>3){
@@ -37,13 +36,8 @@ namespace SMA{
         }
     }
 
-    void DeviceMqtt::thread_task()
+    void DeviceMqtt::update()
     {
-        while(run_thread_task)
-        {
-            device_thread_task();
-            std::this_thread::sleep_for(period_time);
-        }
-        return;
+        device_update();
     }
 }

@@ -5,7 +5,7 @@
 
 class Subject {
     public:
-        Subject();
+        explicit Subject();
         virtual ~Subject() = default;
         virtual void subscribe(std::weak_ptr<Observer> observer);
         virtual void unsubscribe(std::weak_ptr<Observer> observer);

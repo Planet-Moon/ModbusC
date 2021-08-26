@@ -10,7 +10,7 @@ namespace SMA{
 
     }
 
-    void MainsMqtt::device_thread_task()
+    void MainsMqtt::mains_update()
     {
         if(_send_mqtt){
             std::string base_topic = "";
@@ -20,8 +20,8 @@ namespace SMA{
             base_topic += name+"/";
 
             bool ret = false;
-            _mainsFeedIn = device->get_mainsFeedIn(&ret);
-            _mainsSupply = device->get_mainsSupply(&ret);
+            _mainsFeedIn = device->mainsFeedIn;
+            _mainsSupply = device->mainsSupply;
 
             if(ret){
                 if(abs(_mainsFeedIn-_mainsFeedIn_old)>3){
@@ -37,13 +37,8 @@ namespace SMA{
         }
     }
 
-    void MainsMqtt::thread_task()
+    void MainsMqtt::update()
     {
-        while(run_thread_task)
-        {
-            device_thread_task();
-            std::this_thread::sleep_for(period_time);
-        }
-        return;
+        mains_update();
     }
 }

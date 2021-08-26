@@ -13,8 +13,8 @@ namespace SMA {
         ~DeviceMqtt() = default;
 
         std::shared_ptr<Device> device;
-        void device_thread_task();
-        void thread_task() override;
+        void device_update();
+        void update() override;
 
     public:
         int _power;

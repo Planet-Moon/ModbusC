@@ -11,7 +11,7 @@ namespace SMA {
 
     }
 
-    void StorageBoyMqtt::device_thread_task()
+    void StorageBoyMqtt::device_update()
     {
         if(_send_mqtt){
             std::string base_topic = "";
@@ -51,7 +51,7 @@ namespace SMA {
         }
     }
 
-    void StorageBoyMqtt::storageboy_thread_task()
+    void StorageBoyMqtt::storageboy_update()
     {
         if(_send_mqtt){
             std::string base_topic = "";
@@ -61,11 +61,11 @@ namespace SMA {
             base_topic += name+"/";
 
             bool ret = false;
-            _soc = storageBoy->get_soc(&ret);
-            _dischargeCurrent = storageBoy->get_dischargeCurrent(&ret);
-            _chargeCurrent = storageBoy->get_chargeCurrent(&ret);
-            _maxDischargeCurrent = storageBoy->get_maxDischargeCurrent(&ret);
-            _maxChargeCurrent = storageBoy->get_maxChargeCurrent(&ret);
+            _soc = storageBoy->soc;
+            _dischargeCurrent = storageBoy->dischargeCurrent;
+            _chargeCurrent = storageBoy->chargeCurrent;
+            _maxDischargeCurrent = storageBoy->maxDischargeCurrent;
+            _maxChargeCurrent = storageBoy->maxChargeCurrent;
             // assert("return of modbus false" && ret == true);
 
             if(ret){
@@ -93,14 +93,9 @@ namespace SMA {
         return;
     }
 
-    void StorageBoyMqtt::thread_task()
+    void StorageBoyMqtt::update()
     {
-        while(run_thread_task)
-        {
-            device_thread_task();
-            storageboy_thread_task();
-            std::this_thread::sleep_for(period_time);
-        }
-        return;
+        device_update();
+        storageboy_update();
     }
 }
