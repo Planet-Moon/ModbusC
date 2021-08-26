@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 
-set(CMAKE_TOOLCHAIN_FILE "E:/Users/Andreas/Andreas/Private Elektronik/Cpp/vcpkg/scripts/buildsystems/vcpkg.cmake")
+set(CMAKE_TOOLCHAIN_FILE "E:/vcpkg/scripts/buildsystems/vcpkg.cmake")
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 

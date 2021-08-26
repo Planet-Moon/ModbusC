@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.20)
 set(VCPKG_TARGET_TRIPLET x64-windows)
 # set(VCPKG_TARGET_TRIPLET x64-windows-static)
 
-set(CMAKE_TOOLCHAIN_FILE "E:/Users/Andreas/Andreas/Private Elektronik/Cpp/vcpkg/scripts/buildsystems/vcpkg.cmake")
+set(CMAKE_TOOLCHAIN_FILE "E:/vcpkg/scripts/buildsystems/vcpkg.cmake")
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_STANDARD 17)

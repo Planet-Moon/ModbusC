@@ -1,6 +1,6 @@
 {
     "cmake.configureSettings": {
-        "CMAKE_TOOLCHAIN_FILE":"\"E:/Users/Andreas/Andreas/Private Elektronik/Cpp/vcpkg/scripts/buildsystems/vcpkg.cmake\"",
+        "CMAKE_TOOLCHAIN_FILE":"E:/vcpkg/scripts/buildsystems/vcpkg.cmake",
         "VCPKG_BUILD":"ON",
     },
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
@@ -84,6 +84,7 @@
         "list": "cpp",
         "mutex": "cpp",
         "queue": "cpp",
-        "xhash": "cpp"
+        "xhash": "cpp",
+        "variant": "cpp"
     },
 }
