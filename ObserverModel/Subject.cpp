@@ -6,12 +6,12 @@ Subject::Subject()
     ;
 }
 
-void Subject::subscribe(std::weak_ptr<Observer> observer)
+void Subject::add_observer(std::weak_ptr<Observer> observer)
 {
     observers.push_back(observer);
 }
 
-void Subject::unsubscribe(std::weak_ptr<Observer> observer)
+void Subject::remove_observer(std::weak_ptr<Observer> observer)
 {
     std::list<std::weak_ptr<Observer>>::iterator findIter = std::find_if(observers.begin(), observers.end(), [&observer](const std::weak_ptr<Observer> ptr) {
         return ptr.lock() == observer.lock();

@@ -7,8 +7,8 @@ class Subject {
     public:
         explicit Subject();
         virtual ~Subject() = default;
-        virtual void subscribe(std::weak_ptr<Observer> observer);
-        virtual void unsubscribe(std::weak_ptr<Observer> observer);
+        virtual void add_observer(std::weak_ptr<Observer> observer);
+        virtual void remove_observer(std::weak_ptr<Observer> observer);
         virtual void notify();
         std::list<std::string> observerNames();
 

@@ -20,22 +20,22 @@ void test_subscribing()
     Subject subject = Subject();
     std::cout<<"------------------"<<std::endl;
     print_list(subject.observerNames());
-    subject.subscribe(observer);
+    subject.add_observer(observer);
     std::cout<<"------------------"<<std::endl;
     print_list(subject.observerNames());
-    subject.subscribe(observer2);
+    subject.add_observer(observer2);
     std::cout<<"------------------"<<std::endl;
     print_list(subject.observerNames());
-    subject.subscribe(observer3);
+    subject.add_observer(observer3);
     std::cout<<"------------------"<<std::endl;
     print_list(subject.observerNames());
-    subject.unsubscribe(observer2);
+    subject.remove_observer(observer2);
     std::cout<<"------------------"<<std::endl;
     print_list(subject.observerNames());
-    subject.unsubscribe(observer);
+    subject.remove_observer(observer);
     std::cout<<"------------------"<<std::endl;
     print_list(subject.observerNames());
-    subject.unsubscribe(observer3);
+    subject.remove_observer(observer3);
     std::cout<<"------------------"<<std::endl;
     print_list(subject.observerNames());
 }
@@ -57,13 +57,13 @@ void test_update()
     std::shared_ptr<ObserverNameOnUpdate>observer = std::make_shared<ObserverNameOnUpdate>("observer");
     {
         std::shared_ptr<ObserverNameOnUpdate>observer2 = std::make_shared<ObserverNameOnUpdate>("observer2");
-        subject.subscribe(observer);
+        subject.add_observer(observer);
         subject.notify();
         std::cout<<"------------------"<<std::endl;
-        subject.subscribe(observer2);
+        subject.add_observer(observer2);
         subject.notify();
         std::cout<<"------------------"<<std::endl;
-        subject.unsubscribe(observer);
+        subject.remove_observer(observer);
         subject.notify();
         std::cout<<"------------------"<<std::endl;
     }
