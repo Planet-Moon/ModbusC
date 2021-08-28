@@ -10,7 +10,8 @@
 
 namespace mb{
 
-    class Device: public Subject{
+    class Device: public Subject
+    {
         public:
             //properties
             std::string ipAddress;

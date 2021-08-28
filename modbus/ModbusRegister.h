@@ -62,7 +62,13 @@ namespace mb{
                 int temp32{0};
                 long temp64{0};
                 T tempT{0};
-                switch(dataSize) {
+                if(rawData.size() != dataSize){
+                    std::string assert_message = "Invalid data size read from device "+device->ipAddress+", expected " + std::to_string(dataSize) + " got "+std::to_string(rawData.size())+".";
+                    std::cout<<assert_message<<std::endl;
+                    *ret = false;
+                    return static_cast<T>(0);
+                }
+                switch(rawData.size()) {
                     case 2:
                         temp32 = MODBUS_GET_INT32_FROM_INT16(rawData.data(), 0);
                         tempT = static_cast<T>(temp32*factor);
