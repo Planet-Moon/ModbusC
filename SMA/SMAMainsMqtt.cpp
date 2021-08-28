@@ -12,33 +12,27 @@ namespace SMA{
 
     void MainsMqtt::mains_update()
     {
-        if(_send_mqtt){
-            std::string base_topic = "";
-            if(!topicPrefix.empty()){
-                base_topic += topicPrefix+"/";
-            }
-            base_topic += name+"/";
+        _mainsFeedIn = device->mainsFeedIn;
+        _mainsSupply = device->mainsSupply;
 
-            bool ret = false;
-            _mainsFeedIn = device->mainsFeedIn;
-            _mainsSupply = device->mainsSupply;
+        if(abs(_mainsFeedIn-_mainsFeedIn_old)>3 || first_run){
+            client->publish(base_topic+"mainsFeedIn",std::to_string(_mainsFeedIn),1,true);
+            _mainsFeedIn_old = _mainsFeedIn;
+        }
 
-            if(ret){
-                if(abs(_mainsFeedIn-_mainsFeedIn_old)>3){
-                    client->publish(base_topic+"mainsFeedIn",std::to_string(_mainsFeedIn),1,true);
-                    _mainsFeedIn_old = _mainsFeedIn;
-                }
-
-                if(abs(_mainsSupply-_mainsSupply_old)>3){
-                    client->publish(base_topic+"mainsSupply",std::to_string(_mainsSupply),1,true);
-                    _mainsSupply_old = _mainsSupply;
-                }
-            }
+        if(abs(_mainsSupply-_mainsSupply_old)>3 || first_run){
+            client->publish(base_topic+"mainsSupply",std::to_string(_mainsSupply),1,true);
+            _mainsSupply_old = _mainsSupply;
         }
     }
 
     void MainsMqtt::update()
     {
-        mains_update();
+        if(_send_mqtt){
+            update_base_topic();
+            mains_update();
+            if(first_run)
+                first_run = false;
+        }
     }
 }

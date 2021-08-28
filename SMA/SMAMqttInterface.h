@@ -20,5 +20,8 @@ namespace SMA{
     protected:
         bool run_thread_task{true};
         bool _send_mqtt{false};
+        bool first_run;
+        std::string base_topic;
+        void update_base_topic();
     };
 }

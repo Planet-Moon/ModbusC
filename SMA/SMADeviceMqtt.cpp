@@ -11,33 +11,27 @@ namespace SMA{
 
     void DeviceMqtt::device_update()
     {
-        if(_send_mqtt){
-            std::string base_topic = "";
-            if(!topicPrefix.empty()){
-                base_topic += topicPrefix+"/";
-            }
-            base_topic += name+"/";
+        _power = device->power;
+        _dcWatt = device->dcWatt;
 
-            bool ret = false;
-            _power = device->power;
-            _dcWatt = device->dcWatt;
+        if(abs(_power-_power_old)>3 || first_run){
+            client->publish(base_topic+"power",std::to_string(_power),1,true);
+            _power_old = _power;
+        }
 
-            if(ret){
-                if(abs(_power-_power_old)>3){
-                    client->publish(base_topic+"power",std::to_string(_power),1,true);
-                    _power_old = _power;
-                }
-
-                if(abs(_dcWatt-_dcWatt_old)>3){
-                    client->publish(base_topic+"dcWatt",std::to_string(_dcWatt),1,true);
-                    _dcWatt_old = _dcWatt;
-                }
-            }
+        if(abs(_dcWatt-_dcWatt_old)>3 || first_run){
+            client->publish(base_topic+"dcWatt",std::to_string(_dcWatt),1,true);
+            _dcWatt_old = _dcWatt;
         }
     }
 
     void DeviceMqtt::update()
     {
-        device_update();
+        if(_send_mqtt){
+            update_base_topic();
+            device_update();
+            if(first_run)
+                first_run = false;
+        }
     }
 }

@@ -54,31 +54,36 @@ int main(int argc, char** argv){
     std::shared_ptr<myMqtt::Client> mqttClient = std::make_shared<myMqtt::Client>("tcp://192.168.178.107:1883", "cpp_test_client");
 
     std::shared_ptr<SMA::StorageBoy> storageBoy = std::make_shared<SMA::StorageBoy>("192.168.178.113", 502);
-    SMA::StorageBoyMqtt storageBoyMqtt("storageBoy", storageBoy, mqttClient);
-    storageBoyMqtt.topicPrefix = "testTopic";
-    storageBoyMqtt.sending(true);
+    std::shared_ptr<SMA::StorageBoyMqtt> storageBoyMqtt = std::make_shared<SMA::StorageBoyMqtt>("storageBoy", storageBoy, mqttClient);
+    storageBoy->add_observer(storageBoyMqtt);
+    storageBoyMqtt->topicPrefix = "testTopic";
+    storageBoyMqtt->sending(true);
 
     std::shared_ptr<SMA::Device> sunnyBoy0 = std::make_shared<SMA::Device>("192.168.178.128", 502);
-    SMA::DeviceMqtt sunnyBoyMqtt0("sunnyBoy0", sunnyBoy0, mqttClient);
-    sunnyBoyMqtt0.topicPrefix = "testTopic";
-    sunnyBoyMqtt0.sending(true);
+    std::shared_ptr<SMA::DeviceMqtt> sunnyBoyMqtt0 = std::make_shared<SMA::DeviceMqtt>("sunnyBoy0", sunnyBoy0, mqttClient);
+    sunnyBoy0->add_observer(sunnyBoyMqtt0);
+    sunnyBoyMqtt0->topicPrefix = "testTopic";
+    sunnyBoyMqtt0->sending(true);
 
-    SMA::MainsMqtt mainsMqtt("mains", sunnyBoy0, mqttClient);
-    mainsMqtt.topicPrefix = "testTopic";
-    mainsMqtt.sending(true);
+    std::shared_ptr<SMA::MainsMqtt> mainsMqtt = std::make_shared<SMA::MainsMqtt>("mains", sunnyBoy0, mqttClient);
+    sunnyBoy0->add_observer(mainsMqtt);
+    mainsMqtt->topicPrefix = "testTopic";
+    mainsMqtt->sending(true);
 
     std::shared_ptr<SMA::Device> sunnyBoy1 = std::make_shared<SMA::Device>("192.168.178.142", 502);
-    SMA::DeviceMqtt sunnyBoyMqtt1("sunnyBoy1", sunnyBoy1, mqttClient);
-    sunnyBoyMqtt1.topicPrefix = "testTopic";
-    sunnyBoyMqtt1.sending(true);
+    std::shared_ptr<SMA::DeviceMqtt> sunnyBoyMqtt1 = std::make_shared<SMA::DeviceMqtt>("sunnyBoy1", sunnyBoy1, mqttClient);
+    sunnyBoy1->add_observer(sunnyBoyMqtt1);
+    sunnyBoyMqtt1->topicPrefix = "testTopic";
+    sunnyBoyMqtt1->sending(true);
 
     std::shared_ptr<SMA::Device> sunnyBoy2 = std::make_shared<SMA::Device>("192.168.178.152", 502);
-    SMA::DeviceMqtt sunnyBoyMqtt2("sunnyBoy1", sunnyBoy2, mqttClient);
-    sunnyBoyMqtt2.topicPrefix = "testTopic";
-    sunnyBoyMqtt2.sending(true);
+    std::shared_ptr<SMA::DeviceMqtt> sunnyBoyMqtt2 = std::make_shared<SMA::DeviceMqtt>("sunnyBoy2", sunnyBoy2, mqttClient);
+    sunnyBoy2->add_observer(sunnyBoyMqtt2);
+    sunnyBoyMqtt2->topicPrefix = "testTopic";
+    sunnyBoyMqtt2->sending(true);
 
 
-    for(int i = 0; i <8 && run_test; ++i){
+    for(int i = 0; i <10000 && run_test; ++i){
         std::cout << i << "-------------------------" << std::endl;
         std::cout << "->sunnyBoy0" << std::endl;
         sunnyBoy0->testRead();

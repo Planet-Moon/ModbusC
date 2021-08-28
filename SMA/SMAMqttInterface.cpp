@@ -18,4 +18,13 @@ namespace SMA{
     {
         return;
     }
+
+    void MqttInterface::update_base_topic()
+    {
+        std::string base_topic_ = "";
+        if(!topicPrefix.empty()){
+            base_topic_ += topicPrefix+"/";
+        }
+        base_topic = base_topic_ + name+"/";
+    }
 }

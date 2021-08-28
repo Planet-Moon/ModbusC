@@ -13,8 +13,8 @@ namespace SMA {
 			unsigned int soc{0};
 			unsigned int dischargeCurrent{0};
 			unsigned int chargeCurrent{0};
-			unsigned int maxDischargeCurrent{0};
-			unsigned int maxChargeCurrent{0};
+			unsigned int maxDischargeCurrent{0}; // only set once after init
+			unsigned int maxChargeCurrent{0}; // only set once after init
 
 		private:
 			void storageBoyInit();
