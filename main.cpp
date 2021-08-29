@@ -9,6 +9,7 @@
 #include <SMAStorageBoyMqtt.h>
 #include <MqttClient.h>
 #include <SMAModbusRelayDevice.h>
+#include <SMAModbusRelayMains.h>
 #include <cassert>
 #include <chrono>
 #include <signal.h>
@@ -73,8 +74,11 @@ int main(int argc, char** argv){
     mainsMqtt->topicPrefix = "testTopic";
     mainsMqtt->sending(true);
 
-    std::shared_ptr<SMA::ModbusRelayDevice> modbusRelay = std::make_shared<SMA::ModbusRelayDevice>(sunnyBoy0, heatingControl, 32);
-    sunnyBoy0->add_observer(modbusRelay);
+    std::shared_ptr<SMA::ModbusRelayDevice> modbusRelaySunnyBoy0 = std::make_shared<SMA::ModbusRelayDevice>(sunnyBoy0, heatingControl, 32);
+    sunnyBoy0->add_observer(modbusRelaySunnyBoy0);
+
+    std::shared_ptr<SMA::ModbusRelayMains> modbusRelayMains = std::make_shared<SMA::ModbusRelayMains>(sunnyBoy0, heatingControl, 34);
+    sunnyBoy0->add_observer(modbusRelayMains);
 
     std::shared_ptr<SMA::Device> sunnyBoy1 = std::make_shared<SMA::Device>("192.168.178.142", 502);
     std::shared_ptr<SMA::DeviceMqtt> sunnyBoyMqtt1 = std::make_shared<SMA::DeviceMqtt>("sunnyBoy1", sunnyBoy1, mqttClient);

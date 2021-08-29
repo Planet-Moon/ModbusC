@@ -68,3 +68,11 @@ add_library(
 )
 target_link_libraries(SMAModbusRelayDevice PUBLIC SMAModbusRelayInterface)
 target_link_libraries(SMAModbusRelayDevice PUBLIC SMADevice)
+
+add_library(
+    SMAModbusRelayMains
+    SMAModbusRelayMains.h
+    SMAModbusRelayMains.cpp
+)
+target_link_libraries(SMAModbusRelayMains PUBLIC SMAModbusRelayInterface)
+target_link_libraries(SMAModbusRelayMains PUBLIC SMADevice)

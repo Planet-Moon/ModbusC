@@ -15,15 +15,15 @@ namespace SMA
         void reboot();
         void test();
 
-        int power{0};
-        int dcWatt{0};
-        int mainsFeedIn{0};
-        int mainsSupply{0};
+        unsigned int power{0};
+        unsigned int dcWatt{0};
+        unsigned int mainsFeedIn{0};
+        unsigned int mainsSupply{0};
 
-        int get_power(bool *ret = nullptr);
-        int get_dcWatt(bool *ret = nullptr);
-        int get_mainsFeedIn(bool *ret = nullptr);
-        int get_mainsSupply(bool *ret = nullptr);
+        unsigned int get_power(bool *ret = nullptr);
+        unsigned int get_dcWatt(bool *ret = nullptr);
+        unsigned int get_mainsFeedIn(bool *ret = nullptr);
+        unsigned int get_mainsSupply(bool *ret = nullptr);
 
         void testRead(bool *ret = nullptr);
 

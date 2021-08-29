@@ -84,7 +84,7 @@ namespace SMA{
         }
     }
 
-    int Device::get_power(bool* ret)
+    unsigned int Device::get_power(bool* ret)
 	{
 		int temp = 0;
 		if(online){
@@ -96,7 +96,7 @@ namespace SMA{
 		return temp;
 	}
 
-	int Device::get_dcWatt(bool* ret)
+	unsigned int Device::get_dcWatt(bool* ret)
 	{
 		int temp = 0;
 		if(online){
@@ -107,9 +107,9 @@ namespace SMA{
 		return temp;
 	}
 
-    GENERATE_MB_GET_FUNC(int, mainsFeedIn);
+    GENERATE_MB_GET_FUNC(unsigned int, mainsFeedIn);
 
-    GENERATE_MB_GET_FUNC(int, mainsSupply);
+    GENERATE_MB_GET_FUNC(unsigned int, mainsSupply);
 
     void Device::reboot(){
         if(online){

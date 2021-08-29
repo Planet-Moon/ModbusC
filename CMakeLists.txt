@@ -34,6 +34,7 @@ target_link_libraries(main PRIVATE SMAStorageBoy)
 target_link_libraries(main PRIVATE SMAStorageBoyMqtt)
 target_link_libraries(main PRIVATE mqtt)
 target_link_libraries(main PRIVATE SMAModbusRelayDevice)
+target_link_libraries(main PRIVATE SMAModbusRelayMains)
 
 add_subdirectory(TemplateTests)
 

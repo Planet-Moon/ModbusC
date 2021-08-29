@@ -21,7 +21,6 @@ namespace mb{
             {
                 dataSize = data.size();
             }
-            explicit Register(){}
             Register(const Register& other) = delete;
             ~Register() = default;
             int addr = 0;
