@@ -13,5 +13,10 @@ namespace SMA{
             mb::Register<unsigned int> registerMainsFeedIn;
             mb::Register<unsigned int> registerMainsSupply;
             std::shared_ptr<Device> deviceIn;
+            void mains_update();
+
+        private:
+            unsigned int _mainsFeedIn_old;
+            unsigned int _mainsSupply_old;
     };
 }

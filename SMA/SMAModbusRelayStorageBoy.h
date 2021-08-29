@@ -14,5 +14,11 @@ namespace SMA{
             mb::Register<unsigned int>registerChargeCurrent;
             mb::Register<unsigned int>registerDischargeCurrent;
             std::shared_ptr<StorageBoy> deviceIn;
+            void storageBoy_update();
+
+        private:
+            unsigned int _soc_old;
+            unsigned int _chargeCurrent_old;
+            unsigned int _dischargeCurrent_old;
     };
 }

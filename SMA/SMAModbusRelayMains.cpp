@@ -11,10 +11,26 @@ ModbusRelayMains::ModbusRelayMains(std::shared_ptr<Device> deviceIn_, std::share
 {
 }
 
-void ModbusRelayMains::update()
+void ModbusRelayMains::mains_update()
 {
     bool ret = false;
-    registerMainsFeedIn.setValue(deviceIn->mainsFeedIn,&ret);
-    registerMainsSupply.setValue(deviceIn->mainsSupply,&ret);
+    if(abs(static_cast<int>(deviceIn->mainsFeedIn)-static_cast<int>(_mainsFeedIn_old))>3 || first_run)
+    {
+        registerMainsFeedIn.setValue(deviceIn->mainsFeedIn,&ret);
+        _mainsFeedIn_old = deviceIn->mainsFeedIn;
+    }
+
+    if(abs(static_cast<int>(deviceIn->mainsSupply)-static_cast<int>(_mainsSupply_old))>3 || first_run)
+    {
+        registerMainsSupply.setValue(deviceIn->mainsSupply,&ret);
+        _mainsSupply_old = deviceIn->mainsSupply;
+    }
+}
+
+void ModbusRelayMains::update()
+{
+    mains_update();
+    if(first_run)
+        first_run = false;
 }
 }

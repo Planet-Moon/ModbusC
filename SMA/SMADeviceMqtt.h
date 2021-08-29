@@ -16,12 +16,8 @@ namespace SMA {
         void device_update();
         void update() override;
 
-    public:
-        int _power;
-        int _dcWatt;
-
-    protected:
-        int _power_old;
-        int _dcWatt_old;
+    private:
+        unsigned int _power_old;
+        unsigned int _dcWatt_old;
     };
 }

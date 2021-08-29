@@ -11,17 +11,14 @@ namespace SMA{
 
     void DeviceMqtt::device_update()
     {
-        _power = device->power;
-        _dcWatt = device->dcWatt;
-
-        if(abs(_power-_power_old)>3 || first_run){
-            client->publish(base_topic+"power",std::to_string(_power),1,true);
-            _power_old = _power;
+        if(abs(static_cast<int>(device->power)-static_cast<int>(_power_old))>3 || first_run){
+            client->publish(base_topic+"power",std::to_string(device->power),1,true);
+            _power_old = device->power;
         }
 
-        if(abs(_dcWatt-_dcWatt_old)>3 || first_run){
-            client->publish(base_topic+"dcWatt",std::to_string(_dcWatt),1,true);
-            _dcWatt_old = _dcWatt;
+        if(abs(static_cast<int>(device->dcWatt)-static_cast<int>(_dcWatt_old))>3 || first_run){
+            client->publish(base_topic+"dcWatt",std::to_string(device->dcWatt),1,true);
+            _dcWatt_old = device->dcWatt;
         }
     }
 

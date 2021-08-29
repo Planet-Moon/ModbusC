@@ -9,11 +9,33 @@ ModbusRelayStorageBoy::ModbusRelayStorageBoy(std::shared_ptr<StorageBoy> deviceI
 {
 }
 
-void ModbusRelayStorageBoy::update()
+void ModbusRelayStorageBoy::storageBoy_update()
 {
     bool ret = false;
-    registerSoc.setValue(deviceIn->soc,&ret);
-    registerChargeCurrent.setValue(deviceIn->chargeCurrent,&ret);
-    registerDischargeCurrent.setValue(deviceIn->dischargeCurrent,&ret);
+
+    if(abs(static_cast<int>(deviceIn->soc)-static_cast<int>(_soc_old))>1 || first_run)
+    {
+        registerSoc.setValue(deviceIn->soc,&ret);
+        _soc_old = deviceIn->soc;
+    }
+
+    if(abs(static_cast<int>(deviceIn->chargeCurrent)-static_cast<int>(_chargeCurrent_old))>3 || first_run)
+    {
+        registerChargeCurrent.setValue(deviceIn->chargeCurrent,&ret);
+        _chargeCurrent_old = deviceIn->chargeCurrent;
+    }
+
+    if(abs(static_cast<int>(deviceIn->dischargeCurrent)-static_cast<int>(_dischargeCurrent_old))>3 || first_run)
+    {
+        registerDischargeCurrent.setValue(deviceIn->dischargeCurrent,&ret);
+        _dischargeCurrent_old = deviceIn->dischargeCurrent;
+    }
+}
+
+void ModbusRelayStorageBoy::update()
+{
+    storageBoy_update();
+    if(first_run)
+        first_run = false;
 }
 }

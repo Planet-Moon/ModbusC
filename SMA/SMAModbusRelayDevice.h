@@ -13,5 +13,10 @@ namespace SMA{
             mb::Register<unsigned int>registerPower;
             mb::Register<unsigned int>registerDcWatt;
             std::shared_ptr<Device> deviceIn;
+            void device_update();
+
+        private:
+            unsigned int _power_old;
+            unsigned int _dcWatt_old;
     };
 }

@@ -55,6 +55,8 @@ int main(int argc, char** argv){
     storageBoy->add_observer(storageBoyMqtt);
     storageBoyMqtt->topicPrefix = "testTopic";
     storageBoyMqtt->sending(true);
+    std::shared_ptr<SMA::ModbusRelayStorageBoy> modbusRelayStorageBoy = std::make_shared<SMA::ModbusRelayStorageBoy>(storageBoy, heatingControl,36);
+    storageBoy->add_observer(modbusRelayStorageBoy);
 
     std::shared_ptr<SMA::Device> sunnyBoy0 = std::make_shared<SMA::Device>("192.168.178.128", 502);
     std::shared_ptr<SMA::DeviceMqtt> sunnyBoyMqtt0 = std::make_shared<SMA::DeviceMqtt>("sunnyBoy0", sunnyBoy0, mqttClient);

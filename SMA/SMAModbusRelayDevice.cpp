@@ -8,10 +8,26 @@ ModbusRelayDevice::ModbusRelayDevice(std::shared_ptr<Device> deviceIn_, std::sha
 {
 }
 
-void ModbusRelayDevice::update()
+void ModbusRelayDevice::device_update()
 {
     bool ret = false;
-    registerPower.setValue(deviceIn->power,&ret);
-    registerDcWatt.setValue(deviceIn->dcWatt,&ret);
+    if(abs(static_cast<int>(deviceIn->power)-static_cast<int>(_power_old))>3 || first_run)
+    {
+        registerPower.setValue(deviceIn->power,&ret);
+        _power_old = deviceIn->power;
+    }
+
+    if(abs(static_cast<int>(deviceIn->dcWatt)-static_cast<int>(_dcWatt_old))>3 || first_run)
+    {
+        registerDcWatt.setValue(deviceIn->dcWatt,&ret);
+        _dcWatt_old = deviceIn->dcWatt;
+    }
+}
+
+void ModbusRelayDevice::update()
+{
+    device_update();
+    if(first_run)
+        first_run = false;
 }
 }

@@ -12,5 +12,7 @@ namespace SMA{
         ModbusRelayInterface(const ModbusRelayInterface&) = delete;
         ~ModbusRelayInterface() = default;
         virtual void update() override;
+    protected:
+        bool first_run;
     };
 }
