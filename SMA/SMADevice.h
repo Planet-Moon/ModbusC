@@ -63,21 +63,21 @@ namespace SMA
          */
         unsigned int get_dcWatt(bool *ret = nullptr);
         /**
-         * @brief Get the FeedIn from mains register
-         *
-         * Mains -> Local Grid
-         *
-         * @param ret Return status (true: success, false: fail)
-         * @return unsigned int: FeedIn from mains
-         */
-        unsigned int get_mainsFeedIn(bool *ret = nullptr);
-        /**
-         * @brief Get the supply to mains register
+         * @brief Get the feedIn to mains register
          *
          * Mains <- Local Grid
          *
          * @param ret Return status (true: success, false: fail)
-         * @return unsigned int: Supply to mains
+         * @return unsigned int: FeedIn to mains
+         */
+        unsigned int get_mainsFeedIn(bool *ret = nullptr);
+        /**
+         * @brief Get the supply from mains register
+         *
+         * Mains -> Local Grid
+         *
+         * @param ret Return status (true: success, false: fail)
+         * @return unsigned int: Supply from mains
          */
         unsigned int get_mainsSupply(bool *ret = nullptr);
 
