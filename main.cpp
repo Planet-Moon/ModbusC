@@ -2,14 +2,7 @@
 #include <hello.h>
 #include <ModbusDevice.h>
 #include <ModbusRegister.h>
-#include <SMADevice.h>
-#include <SMADeviceMqtt.h>
-#include <SMAMainsMqtt.h>
-#include <SMAStorageBoy.h>
-#include <SMAStorageBoyMqtt.h>
-#include <MqttClient.h>
-#include <SMAModbusRelayDevice.h>
-#include <SMAModbusRelayMains.h>
+#include <SMALIB.h>
 #include <cassert>
 #include <chrono>
 #include <signal.h>

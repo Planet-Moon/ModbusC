@@ -53,6 +53,9 @@ add_library(
 target_link_libraries(SMAStorageBoyMqtt PUBLIC SMAStorageBoy)
 target_link_libraries(SMAStorageBoyMqtt PUBLIC SMAMqttInterface)
 
+add_library(SMAMqtt INTERFACE)
+target_link_libraries(SMAMqtt INTERFACE SMADeviceMqtt SMAMainsMqtt SMAStorageBoyMqtt)
+
 add_library(
     SMAModbusRelayInterface
     SMAModbusRelayInterface.h
@@ -76,3 +79,17 @@ add_library(
 )
 target_link_libraries(SMAModbusRelayMains PUBLIC SMAModbusRelayInterface)
 target_link_libraries(SMAModbusRelayMains PUBLIC SMADevice)
+
+add_library(
+    SMAModbusRelayStorageBoy
+    SMAModbusRelayStorageBoy.h
+    SMAModbusRelayStorageBoy.cpp
+)
+target_link_libraries(SMAModbusRelayStorageBoy PUBLIC SMAModbusRelayInterface)
+target_link_libraries(SMAModbusRelayStorageBoy PUBLIC SMAStorageBoy)
+
+add_library(SMAModbusRelay INTERFACE)
+target_link_libraries(SMAModbusRelay INTERFACE SMAModbusRelayDevice SMAModbusRelayMains SMAModbusRelayStorageBoy)
+
+add_library(SMALIB INTERFACE)
+target_link_libraries(SMALIB INTERFACE SMAMqtt SMAModbusRelay)

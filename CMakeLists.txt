@@ -27,14 +27,7 @@ add_subdirectory(ObserverModel)
 
 add_executable(main main.cpp)
 target_link_libraries(main PRIVATE hello)
-target_link_libraries(main PRIVATE SMADevice)
-target_link_libraries(main PRIVATE SMADeviceMqtt)
-target_link_libraries(main PRIVATE SMAMainsMqtt)
-target_link_libraries(main PRIVATE SMAStorageBoy)
-target_link_libraries(main PRIVATE SMAStorageBoyMqtt)
-target_link_libraries(main PRIVATE mqtt)
-target_link_libraries(main PRIVATE SMAModbusRelayDevice)
-target_link_libraries(main PRIVATE SMAModbusRelayMains)
+target_link_libraries(main PRIVATE SMALIB)
 
 add_subdirectory(TemplateTests)
 
