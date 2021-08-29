@@ -147,7 +147,7 @@ namespace mb{
                 std::cout << e.what() << std::endl;
                 update_connections_stats('e');
             }
-            std::this_thread::sleep_for(std::chrono::milliseconds(1000*read_values_period));
+            std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<unsigned long>(1000*read_values_period)));
         }
     }
 

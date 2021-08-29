@@ -63,7 +63,7 @@ namespace myMqtt{
         virtual void message_arrived(mqtt::const_message_ptr msg) override;
         /**
          * Called when delivery for a message has been completed, and all
-	     * acknowledgments have been received.
+         * acknowledgments have been received.
          */
         virtual void delivery_complete(mqtt::delivery_token_ptr tok) override;
 

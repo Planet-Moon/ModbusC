@@ -80,7 +80,7 @@ namespace mb{
              * @brief Period time for reading values
              *
              */
-            unsigned short read_values_period{5}; //seconds
+            float read_values_period{5.}; //seconds
             /**
              * @brief Online status of device
              *
