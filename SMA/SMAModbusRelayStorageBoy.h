@@ -34,6 +34,24 @@ namespace SMA{
             mb::Register<unsigned int>registerChargeCurrent;
             /// Register where the StorageBoy::dischargeCurrent value will be written to
             mb::Register<unsigned int>registerDischargeCurrent;
+            /**
+             * @brief Set the soc register address
+             *
+             * @param address
+             */
+            void set_soc_register_address(int address);
+            /**
+             * @brief Set the chargeCurrent register address
+             *
+             * @param address
+             */
+            void set_chargeCurrent_register_address(int address);
+            /**
+             * @brief Set the dischargeCurrent register address
+             *
+             * @param address
+             */
+            void set_dischargeCurrent_register_address(int address);
             /// StorageBoy the values are read from
             std::shared_ptr<StorageBoy> deviceIn;
             /**

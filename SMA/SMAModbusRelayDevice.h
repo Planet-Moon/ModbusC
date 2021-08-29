@@ -26,6 +26,18 @@ namespace SMA{
             mb::Register<unsigned int>registerPower;
             /// Register where the Device::dcWatt value will be written to
             mb::Register<unsigned int>registerDcWatt;
+            /**
+             * @brief Set the power register address
+             *
+             * @param address
+             */
+            void set_power_register_address(int address);
+            /**
+             * @brief Set the dcWatt register address
+             *
+             * @param address
+             */
+            void set_dcWatt_register_address(int address);
             /// Device where the values are read from
             std::shared_ptr<Device> deviceIn;
             /**

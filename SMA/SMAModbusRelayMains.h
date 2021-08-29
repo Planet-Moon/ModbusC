@@ -32,6 +32,18 @@ namespace SMA{
             mb::Register<unsigned int> registerMainsFeedIn;
             /// Register where the Device::mainsSupply value will be written to
             mb::Register<unsigned int> registerMainsSupply;
+            /**
+             * @brief Set the MainsFeedIn register address
+             *
+             * @param address
+             */
+            void set_MainsFeedIn_register_address(int address);
+            /**
+             * @brief Set the MainsSuppy register address
+             *
+             * @param address
+             */
+            void set_MainsSuppy_register_address(int address);
             /// Device where the values are read from
             std::shared_ptr<Device> deviceIn;
             /**

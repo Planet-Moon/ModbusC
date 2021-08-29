@@ -11,6 +11,16 @@ ModbusRelayMains::ModbusRelayMains(std::shared_ptr<Device> deviceIn_, std::share
 {
 }
 
+void ModbusRelayMains::set_MainsFeedIn_register_address(int address)
+{
+    registerMainsFeedIn.addr = address;
+}
+
+void ModbusRelayMains::set_MainsSuppy_register_address(int address)
+{
+    registerMainsSupply.addr = address;
+}
+
 void ModbusRelayMains::mains_update()
 {
     bool ret = false;

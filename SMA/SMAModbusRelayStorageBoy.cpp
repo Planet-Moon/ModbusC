@@ -9,6 +9,21 @@ ModbusRelayStorageBoy::ModbusRelayStorageBoy(std::shared_ptr<StorageBoy> deviceI
 {
 }
 
+void ModbusRelayStorageBoy::set_soc_register_address(int address)
+{
+    registerSoc.addr = address;
+}
+
+void ModbusRelayStorageBoy::set_chargeCurrent_register_address(int address)
+{
+    registerChargeCurrent.addr = address;
+}
+
+void ModbusRelayStorageBoy::set_dischargeCurrent_register_address(int address)
+{
+    registerDischargeCurrent.addr = address;
+}
+
 void ModbusRelayStorageBoy::storageBoy_update()
 {
     bool ret = false;

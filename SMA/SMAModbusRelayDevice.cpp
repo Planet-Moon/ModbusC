@@ -8,6 +8,16 @@ ModbusRelayDevice::ModbusRelayDevice(std::shared_ptr<Device> deviceIn_, std::sha
 {
 }
 
+void ModbusRelayDevice::set_power_register_address(int address)
+{
+    registerPower.addr = address;
+}
+
+void ModbusRelayDevice::set_dcWatt_register_address(int address)
+{
+    registerDcWatt.addr = address;
+}
+
 void ModbusRelayDevice::device_update()
 {
     bool ret = false;
