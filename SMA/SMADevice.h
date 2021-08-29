@@ -45,11 +45,11 @@ namespace SMA
         unsigned int model_{0};
         mb::Register<long long> mbReg_deviceInfo;
         mb::Register<unsigned int> mbReg_serialNumber;
-        mb::Register<int> mbReg_model;
-        mb::Register<int> mbReg_rebootRegister;
-        mb::Register<int> mbReg_power;
-        mb::Register<int> mbReg_dcWatt;
-        mb::Register<int> mbReg_mainsFeedIn;
-        mb::Register<int> mbReg_mainsSupply;
+        mb::Register<unsigned int> mbReg_model;
+        mb::Register<unsigned int> mbReg_rebootRegister;
+        mb::Register<unsigned int> mbReg_power;
+        mb::Register<unsigned int> mbReg_dcWatt;
+        mb::Register<unsigned int> mbReg_mainsFeedIn;
+        mb::Register<unsigned int> mbReg_mainsSupply;
     };
 }

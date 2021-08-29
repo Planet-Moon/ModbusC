@@ -10,8 +10,6 @@ set(CMAKE_CXX_STANDARD 17)
 
 project(main)
 
-add_definitions(-DDEBUG=1)
-
 add_library(
     hello
     hello/hello.h
@@ -35,6 +33,7 @@ target_link_libraries(main PRIVATE SMAMainsMqtt)
 target_link_libraries(main PRIVATE SMAStorageBoy)
 target_link_libraries(main PRIVATE SMAStorageBoyMqtt)
 target_link_libraries(main PRIVATE mqtt)
+target_link_libraries(main PRIVATE SMAModbusRelayDevice)
 
 add_subdirectory(TemplateTests)
 

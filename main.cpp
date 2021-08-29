@@ -8,6 +8,7 @@
 #include <SMAStorageBoy.h>
 #include <SMAStorageBoyMqtt.h>
 #include <MqttClient.h>
+#include <SMAModbusRelayDevice.h>
 #include <cassert>
 #include <chrono>
 #include <signal.h>
@@ -44,6 +45,8 @@ int main(int argc, char** argv){
     mb::Register<float> testRegister(heatingControl.get(), 45, 0.1, "°C");
     std::cout << "testRegister: " << testRegister.getValue(&ret_val) << ", status: "<< ret_val << std::endl;
 
+    mb::Register<unsigned int> testRegistersMany(heatingControl.get(), 32);
+
     testRegister.setValue(float(753));
     float testValue = 3.14156;
     testRegister.setValue(testValue);
@@ -69,6 +72,9 @@ int main(int argc, char** argv){
     sunnyBoy0->add_observer(mainsMqtt);
     mainsMqtt->topicPrefix = "testTopic";
     mainsMqtt->sending(true);
+
+    std::shared_ptr<SMA::ModbusRelayDevice> modbusRelay = std::make_shared<SMA::ModbusRelayDevice>(sunnyBoy0, heatingControl, 32);
+    sunnyBoy0->add_observer(modbusRelay);
 
     std::shared_ptr<SMA::Device> sunnyBoy1 = std::make_shared<SMA::Device>("192.168.178.142", 502);
     std::shared_ptr<SMA::DeviceMqtt> sunnyBoyMqtt1 = std::make_shared<SMA::DeviceMqtt>("sunnyBoy1", sunnyBoy1, mqttClient);
@@ -108,6 +114,8 @@ int main(int argc, char** argv){
         volatile unsigned int storageBoy_mainsSupply = storageBoy->get_mainsSupply();
         volatile bool storageBoy_online = storageBoy->online;
         std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+
+        std::vector<uint16_t> testRegisters = testRegistersMany.readRawData();
         std::cout << i << "+++---+++---+++---+++---" << std::endl;
     }
     std::cout<<"storageBoy:"<<std::endl;
