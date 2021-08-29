@@ -71,7 +71,7 @@ public:
 		if (!cause.empty())
 			cout << "\tcause: " << cause << endl;
 	}
-
+	///
 	void delivery_complete(mqtt::delivery_token_ptr tok) override {
 		cout << "\tDelivery complete for token: "
 			<< (tok ? tok->get_message_id() : -1) << endl;

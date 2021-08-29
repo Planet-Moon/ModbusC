@@ -4,11 +4,17 @@
 #include <cmath>
 
 namespace TestTemplate{
+    /**
+     * @brief Test templates class
+     *
+     * @tparam T: Value type
+     */
     template<class T>
     class TemplateTest{
         public:
-            TemplateTest();
-            TemplateTest(T value);
+            explicit TemplateTest();
+            explicit TemplateTest(T value);
+            ~TemplateTest() = default;
             T value;
             std::vector<uint16_t> data;
             T convert(std::vector<uint16_t> input);

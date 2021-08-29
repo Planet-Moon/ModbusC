@@ -87,23 +87,6 @@ namespace myMqtt {
         #endif // DEBUG
     }
 
-    void delivery_action_listener::on_failure(const mqtt::token& tok)
-    {
-        action_listener::on_failure(tok);
-        done_ = true;
-    }
-
-    void delivery_action_listener::on_success(const mqtt::token& tok)
-    {
-        action_listener::on_success(tok);
-        done_ = true;
-    }
-
-    bool delivery_action_listener::is_done() const
-    {
-        return done_;
-    }
-
     Client::Client(const std::string& serverURI, const std::string& clientURI)
     {
         connectOptions = mqtt::connect_options_builder()

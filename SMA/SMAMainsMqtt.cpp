@@ -12,17 +12,14 @@ namespace SMA{
 
     void MainsMqtt::mains_update()
     {
-        _mainsFeedIn = device->mainsFeedIn;
-        _mainsSupply = device->mainsSupply;
-
-        if(abs(_mainsFeedIn-_mainsFeedIn_old)>3 || first_run){
-            client->publish(base_topic+"mainsFeedIn",std::to_string(_mainsFeedIn),1,true);
-            _mainsFeedIn_old = _mainsFeedIn;
+        if(abs(static_cast<int>(device->mainsFeedIn)-static_cast<int>(_mainsFeedIn_old))>3 || first_run){
+            client->publish(base_topic+"mainsFeedIn",std::to_string(device->mainsFeedIn),1,true);
+            _mainsFeedIn_old = device->mainsFeedIn;
         }
 
-        if(abs(_mainsSupply-_mainsSupply_old)>3 || first_run){
-            client->publish(base_topic+"mainsSupply",std::to_string(_mainsSupply),1,true);
-            _mainsSupply_old = _mainsSupply;
+        if(abs(static_cast<int>(device->mainsSupply)-static_cast<int>(_mainsSupply_old))>3 || first_run){
+            client->publish(base_topic+"mainsSupply",std::to_string(device->mainsSupply),1,true);
+            _mainsSupply_old = device->mainsSupply;
         }
     }
 

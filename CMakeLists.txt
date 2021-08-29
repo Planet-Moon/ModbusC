@@ -32,3 +32,17 @@ target_link_libraries(main PRIVATE SMALIB)
 add_subdirectory(TemplateTests)
 
 add_subdirectory(thread_test)
+
+find_package(Doxygen
+    REQUIRED dot
+    OPTIONAL_COMPONENTS mscgen dia
+)
+set(DOXYGEN_EXTRACT_PRIVATE TRUE)
+set(DOXYGEN_WARN_IF_UNDOCUMENTED FALSE)
+set(OPTIMIZE_OUTPUT_FOR_C TRUE)
+
+doxygen_add_docs(doxygen_target
+    ${CMAKE_SOURCE_DIR}
+    ALL
+    COMMENT "Run doxygen_target"
+)

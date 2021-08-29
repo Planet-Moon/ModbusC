@@ -7,7 +7,13 @@
 #include <future>
 
 
-
+/**
+ * @brief Calculate fibonacci number
+ *
+ * @param to n times to calculate
+ * @param result Result of the calculation
+ * @return unsigned int: Result of the calculation
+ */
 unsigned int fibonacci(unsigned int to, unsigned int* result = nullptr)
 {
     unsigned int result_ = 0;
@@ -26,7 +32,12 @@ unsigned int fibonacci(unsigned int to, unsigned int* result = nullptr)
     return result_;
 }
 
-
+/**
+ * @brief Test whether pointers are working as expected
+ *
+ * @param a first pointer
+ * @param b second pointer
+ */
 void test(int* a, int* b = nullptr)
 {
     if(b != nullptr){
@@ -36,7 +47,11 @@ void test(int* a, int* b = nullptr)
     }
 }
 
-
+/**
+ * @brief Run test inside a thread
+ *
+ * @return int 0 if successful
+ */
 int test_prototype(){
     int test1 = 1;
     int test2 = 3;
@@ -46,7 +61,13 @@ int test_prototype(){
     return 0;
 }
 
-
+/**
+ * @brief main for testing fibonacci
+ *
+ * @param argc
+ * @param argv
+ * @return int
+ */
 int main(int argc, char* argv[])
 {
     int nThreads = 45;

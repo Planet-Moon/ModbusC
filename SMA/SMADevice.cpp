@@ -9,8 +9,8 @@
     mbReg_serialNumber(this, 30057), \
     mbReg_rebootRegister(this, 40077), \
     mbReg_model(this, 30057), \
-	mbReg_power(this, 30775, 1, " W"), \
-	mbReg_dcWatt(this, 30773, 1, " W"), \
+    mbReg_power(this, 30775, 1, " W"), \
+    mbReg_dcWatt(this, 30773, 1, " W"), \
     mbReg_mainsFeedIn(this, 30867, 1, " W"), \
     mbReg_mainsSupply(this, 30865, 1, " W")
 
@@ -77,35 +77,35 @@ namespace SMA{
             throw connection_exception;
         }
         slaveId_ = return_value[3];
-        pysicalSusyId_ = static_cast<unsigned short>(return_value[2]);
-        pysicalSerialNumber_ = static_cast<unsigned int>(MODBUS_GET_INT32_FROM_INT16(return_value.data(), 0));
+        physicalSusyId_ = static_cast<unsigned short>(return_value[2]);
+        physicalSerialNumber_ = static_cast<unsigned int>(MODBUS_GET_INT32_FROM_INT16(return_value.data(), 0));
         if(modbus_set_slave(connection, slaveId_) != 0){
             throw connection_exception;
         }
     }
 
     unsigned int Device::get_power(bool* ret)
-	{
-		int temp = 0;
-		if(online){
-			temp = mbReg_power.getValue(ret);
-		}
-		if(temp < 0){
-			temp = 0;
-		}
-		return temp;
-	}
+    {
+        int temp = 0;
+        if(online){
+            temp = mbReg_power.getValue(ret);
+        }
+        if(temp < 0){
+            temp = 0;
+        }
+        return temp;
+    }
 
-	unsigned int Device::get_dcWatt(bool* ret)
-	{
-		int temp = 0;
-		if(online){
-			temp = mbReg_dcWatt.getValue(ret);
-		}
-		if(temp < 0)
-			temp = 0;
-		return temp;
-	}
+    unsigned int Device::get_dcWatt(bool* ret)
+    {
+        int temp = 0;
+        if(online){
+            temp = mbReg_dcWatt.getValue(ret);
+        }
+        if(temp < 0)
+            temp = 0;
+        return temp;
+    }
 
     GENERATE_MB_GET_FUNC(unsigned int, mainsFeedIn);
 
@@ -158,12 +158,12 @@ namespace SMA{
     }
 
     void Device::testRead(bool* ret /* = nullptr */)
-	{
-		std::cout << "online start: " << online << std::endl;
-		std::cout << "power: " << get_power(ret) << std::endl;
-		std::cout << "dcWatt: " << get_dcWatt(ret) << std::endl;
-		std::cout << "mainsFeedIn: " << get_mainsFeedIn(ret) << std::endl;
-		std::cout << "mainsSupply: " << get_mainsSupply(ret) << std::endl;
-		std::cout << "online end: " << online << std::endl;
-	}
+    {
+        std::cout << "online start: " << online << std::endl;
+        std::cout << "power: " << get_power(ret) << std::endl;
+        std::cout << "dcWatt: " << get_dcWatt(ret) << std::endl;
+        std::cout << "mainsFeedIn: " << get_mainsFeedIn(ret) << std::endl;
+        std::cout << "mainsSupply: " << get_mainsSupply(ret) << std::endl;
+        std::cout << "online end: " << online << std::endl;
+    }
 }

@@ -9,9 +9,22 @@ namespace mb{
 
     std::string printVector(std::vector<uint16_t> input);
 
+    /**
+     * @brief Modbus register for a #mb::Device
+     *
+     * @tparam T Type of value inside the register (short, unsigned int, int, long, float, double)
+     */
     template<class T>
     class Register{
         public:
+            /**
+             * @brief Construct a new Register object
+             *
+             * @param device_ #mb::Device instance this register belongs to
+             * @param addr_ Address of the register
+             * @param factor_ Factor to multiply the value of the register
+             * @param unit_ Unit of the register value
+             */
             explicit Register(Device* device_, int addr_, float factor_ = 1., std::string unit_ = "") :
                 device(device_),
                 addr(addr_),
@@ -23,16 +36,46 @@ namespace mb{
             }
             Register(const Register& other) = delete;
             ~Register() = default;
+            /**
+             * @brief Address of the register
+             *
+             */
             int addr = 0;
+            /**
+             * @brief Factor to multiply the value of the register
+             *
+             */
             float factor = 0;
+            /**
+             * @brief Unit of the register value
+             *
+             */
             std::string unit = "";
 
         private:
+            /**
+             * @brief Data vector for raw data of the register
+             *
+             */
             std::vector<uint16_t> data = std::vector<uint16_t>(0,0);
+            /**
+             * @brief Length of the register in numbers of words(16bit)
+             *
+             */
             unsigned short dataSize = 0;
+            /**
+             * @brief #mb::Device instance this register belongs to
+             *
+             */
             Device* device = nullptr;
 
         public:
+            /**
+             * @brief Read raw data from the register
+             *
+             * @param ret Return status (true: success, false: fail)
+             * @return std::vector<uint16_t> Data vector with raw data from the register
+             */
             std::vector<uint16_t> readRawData(bool* ret = nullptr)
             {
                 assert(device != nullptr && "Device must not be nullptr");
@@ -45,6 +88,12 @@ namespace mb{
                 return data;
             }
 
+            /**
+             * @brief Write raw data to the register
+             *
+             * @param input Data vector to be written to the register
+             * @param ret Return status (true: success, false: fail)
+             */
             void writeRawData(const std::vector<uint16_t>* input, bool* ret = nullptr)
             {
                 assert(device != nullptr);
@@ -56,6 +105,14 @@ namespace mb{
                 }
             }
 
+            /**
+             * @brief Get value from the register
+             *
+             * Uses #readRawData to get data and then converts it to T.
+             *
+             * @param ret Return status (true: success, false: fail)
+             * @return T Value of the register
+             */
             T getValue(bool* ret = nullptr)
             {
                 std::vector<uint16_t> rawData = readRawData(ret);
@@ -89,6 +146,12 @@ namespace mb{
             }
 
         public:
+            /**
+             * @brief Set the Value of the register
+             *
+             * @param input Data to be written to the register
+             * @param ret Return status (true: success, false: fail)
+             */
             void setValue(short input, bool* ret = nullptr)
             {
                 std::vector<uint16_t> buffer(dataSize);
@@ -97,6 +160,12 @@ namespace mb{
                 writeRawData(&buffer,ret);
             };
 
+            /**
+             * @brief Set the Value of the register
+             *
+             * @param input Data to be written to the register
+             * @param ret Return status (true: success, false: fail)
+             */
             void setValue(unsigned int input, bool* ret = nullptr)
             {
                 input /= factor;
@@ -106,6 +175,12 @@ namespace mb{
                 return;
             }
 
+            /**
+             * @brief Set the Value of the register
+             *
+             * @param input Data to be written to the register
+             * @param ret Return status (true: success, false: fail)
+             */
             void setValue(int input, bool* ret = nullptr)
             {
                 input /= factor;
@@ -115,6 +190,12 @@ namespace mb{
                 return;
             }
 
+            /**
+             * @brief Set the Value of the register
+             *
+             * @param input Data to be written to the register
+             * @param ret Return status (true: success, false: fail)
+             */
             void setValue(long input, bool* ret = nullptr)
             {
                 input /= factor;
@@ -124,6 +205,13 @@ namespace mb{
                 return;
             }
 
+
+            /**
+             * @brief Set the Value of the register
+             *
+             * @param input Data to be written to the register
+             * @param ret Return status (true: success, false: fail)
+             */
             void setValue(float input, bool* ret = nullptr)
             {
                 int temp = input/factor;
@@ -133,6 +221,12 @@ namespace mb{
                 return;
             }
 
+            /**
+             * @brief Set the Value of the register
+             *
+             * @param input Data to be written to the register
+             * @param ret Return status (true: success, false: fail)
+             */
             void setValue(double input, bool* ret = nullptr)
             {
                 long temp = input/factor;
