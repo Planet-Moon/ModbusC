@@ -40,9 +40,11 @@ namespace SMA {
         void update() override;
 
     protected:
-        /// Previously read mains feed in
+        /// Previously read mains feed in value
         unsigned int _mainsFeedIn_old;
-        /// Previously read mains supply
+        /// Previously read mains supply value
         unsigned int _mainsSupply_old;
+        /// Previously read power_delta value
+        int _power_delta_old;
     };
 }
