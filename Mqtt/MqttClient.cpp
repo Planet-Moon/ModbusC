@@ -50,9 +50,11 @@ namespace myMqtt {
         std::cout << "\nConnection lost" << std::endl;
         #endif // DEBUG
         if (!cause.empty())
+        {
             #ifdef DEBUG
             std::cout << "\tcause: " << cause << std::endl;
             #endif // DEBUG
+        }
     }
 
     void callback::message_arrived(mqtt::const_message_ptr msg)
