@@ -87,4 +87,7 @@
         "xhash": "cpp",
         "variant": "cpp"
     },
+    "cSpell.words": [
+        "Mqtt"
+    ],
 }
