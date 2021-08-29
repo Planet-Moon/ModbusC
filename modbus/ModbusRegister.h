@@ -12,7 +12,7 @@ namespace mb{
     template<class T>
     class Register{
         public:
-            Register(Device* device_, int addr_, float factor_ = 1., std::string unit_ = "") :
+            explicit Register(Device* device_, int addr_, float factor_ = 1., std::string unit_ = "") :
                 device(device_),
                 addr(addr_),
                 factor(factor_),
@@ -20,22 +20,23 @@ namespace mb{
                 data(std::vector<uint16_t>(sizeof(T)/2, 0))
             {
                 dataSize = data.size();
-                return;
             }
+            explicit Register(){}
             Register(const Register& other) = delete;
             ~Register() = default;
-            int addr;
-            float factor;
-            std::string unit;
+            int addr = 0;
+            float factor = 0;
+            std::string unit = "";
 
         private:
-            std::vector<uint16_t> data;
-            unsigned short dataSize;
-            Device* device;
+            std::vector<uint16_t> data = std::vector<uint16_t>(0,0);
+            unsigned short dataSize = 0;
+            Device* device = nullptr;
 
         public:
-            std::vector<uint16_t> readRawData(bool* ret = nullptr) {
-                assert(device != nullptr);
+            std::vector<uint16_t> readRawData(bool* ret = nullptr)
+            {
+                assert(device != nullptr && "Device must not be nullptr");
                 device->modbus_mtx.lock();
                 int status = modbus_read_registers(device->connection, addr, dataSize, data.data());
                 device->modbus_mtx.unlock();
@@ -45,7 +46,8 @@ namespace mb{
                 return data;
             }
 
-            void writeRawData(const std::vector<uint16_t>* input, bool* ret = nullptr) {
+            void writeRawData(const std::vector<uint16_t>* input, bool* ret = nullptr)
+            {
                 assert(device != nullptr);
                 device->modbus_mtx.lock();
                 int status = modbus_write_registers(device->connection, addr, dataSize, input->data());
@@ -95,6 +97,15 @@ namespace mb{
                 break;
                 writeRawData(&buffer,ret);
             };
+
+            void setValue(unsigned int input, bool* ret = nullptr)
+            {
+                input /= factor;
+                std::vector<uint16_t> buffer(dataSize);
+                MODBUS_SET_INT32_TO_INT16(buffer.data(), 0, input);
+                writeRawData(&buffer,ret);
+                return;
+            }
 
             void setValue(int input, bool* ret = nullptr)
             {
